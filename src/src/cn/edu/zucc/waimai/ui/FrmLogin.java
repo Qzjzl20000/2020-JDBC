@@ -27,27 +27,26 @@ public class FrmLogin extends JFrame {
 	private JTextField textField_2;
 	private JPasswordField textField_1;
 
-	/**
-	 * Launch the application.
-	 */
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				
+				try {
+					FrmLogin fmLogin=new FrmLogin();
+					fmLogin.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}
-
-	/**
-	 * Create the frame.
-	 */
+	
 	public FrmLogin() {
 		
 		setTitle("登陆系统");
 		setBackground(Color.GRAY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 310);
-		this.setVisible(true);
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -85,36 +84,35 @@ public class FrmLogin extends JFrame {
 				System.exit(0);
 			}
 		});
-		button_1.setBounds(288, 232, 117, 29);
+		button_1.setBounds(284, 230, 117, 29);
 		panel.add(button_1);
 		
-		JButton button_2 = new JButton("登陆");
-//		button_2.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				String userid=textField_2.getText();
-//				String pwd=new String(textField_1.getPassword());
-//				try {
-//					BeanUser.currentLoginUser= WaiMaiUtil.userManager.login(userid, pwd);
-////					FrmMainYH dlg=new FrmMainYH();
-////					dlg.setVisible(true);
-//					
-//					JOptionPane.showMessageDialog(null, "登陆成功", "系统提示",JOptionPane.INFORMATION_MESSAGE);
-//				} catch (BaseException e1) {
-//					JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
-//					return;
-//				}
-//				setVisible(false);
-//			}
-//		});
-		button_2.setBounds(165, 232, 117, 29);
+		JButton button_2 = new JButton("用户登陆");
+		button_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String userid=textField_2.getText();
+				String pwd=new String(textField_1.getPassword());
+				try {
+					BeanUser.currentLoginUser= WaiMaiUtil.userManager.login(userid, pwd);
+					FrmMainYH dlg=new FrmMainYH();
+					dlg.setVisible(true);
+					JOptionPane.showMessageDialog(null, "登陆成功", "系统提示",JOptionPane.INFORMATION_MESSAGE);
+				} catch (BaseException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				setVisible(false);
+			}
+		});
+		button_2.setBounds(165, 216, 117, 29);
 		panel.add(button_2);
 		
 		JButton button_3 = new JButton("注册");
-		button_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		button_3.addActionListener((e)-> {
 				FrmYHRegister dlg=new FrmYHRegister();
+				dlg.setFm(this);
 				dlg.setVisible(true);
-			}
+				setEnabled(false);
 		});
 		button_3.setBounds(43, 232, 117, 29);
 		panel.add(button_3);
@@ -131,8 +129,11 @@ public class FrmLogin extends JFrame {
 		lblNewLabel_4.setBounds(137, 53, 156, 16);
 		panel.add(lblNewLabel_4);
 		
+		JButton button_2_1 = new JButton("管理员登陆");
+		button_2_1.setBounds(165, 241, 117, 29);
+		panel.add(button_2_1);
 		
-		
+		this.setVisible(true);
 		
 	}
 }

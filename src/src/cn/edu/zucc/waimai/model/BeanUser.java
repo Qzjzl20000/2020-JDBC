@@ -29,7 +29,7 @@ public class BeanUser {
 		else if(col==6) return ""+this.getUser_city();
 		else if(col==7) return ""+this.getUser_register_time();
 		else if(col==8) {
-			if(this.getUser_vip_end_time().equals(null)) {
+			if(this.getUser_vip_end_time().equals("")) {
 				return "Not VIP";
 			}
 			else return "VIP until "+this.getUser_vip_end_time();

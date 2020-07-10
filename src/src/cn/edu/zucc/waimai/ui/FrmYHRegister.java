@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
+import java.awt.Frame;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
@@ -35,6 +36,16 @@ public class FrmYHRegister extends JFrame {
 	private JPasswordField textField_4;
 	private JTextField textField_5;
 	private JTextField textField_6;
+	private FrmLogin fm;
+	
+	
+	public FrmLogin getFm() {
+		return fm;
+	}
+
+	public void setFm(FrmLogin fm) {
+		this.fm = fm;
+	}
 
 	/**
 	 * Launch the application.
@@ -42,12 +53,12 @@ public class FrmYHRegister extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					FrmYHRegister frame = new FrmYHRegister();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+//				try {
+//					FrmYHRegister frame = new FrmYHRegister(FrmLogin fm);
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
 			}
 		});
 	}
@@ -148,6 +159,7 @@ public class FrmYHRegister extends JFrame {
 		Button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
+				fm.setEnabled(true);
 			}
 		});
 		Button_1.setBounds(23, 6, 117, 29);
@@ -170,10 +182,12 @@ public class FrmYHRegister extends JFrame {
 								usere_mail,usercity);
 						setVisible(false);
 						JOptionPane.showMessageDialog(null, "注册成功", "系统提示",JOptionPane.INFORMATION_MESSAGE);
+						
 					} catch (BaseException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
 						return;
 					}
+					fm.setEnabled(true);
 				}
 			}
 		});
