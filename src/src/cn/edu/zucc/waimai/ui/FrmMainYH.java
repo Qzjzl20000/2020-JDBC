@@ -21,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
 import src.cn.edu.zucc.waimai.WaiMaiUtil;
 import src.cn.edu.zucc.waimai.model.BeanSj;
 import src.cn.edu.zucc.waimai.model.BeanSjFL;
+import src.cn.edu.zucc.waimai.model.BeanSp;
 import src.cn.edu.zucc.waimai.model.BeanUser;
 import src.cn.edu.zucc.waimai.util.BaseException;
 
@@ -56,12 +57,6 @@ public class FrmMainYH extends JFrame{
 	private BeanSj curSj=null;
 	List<BeanSj> allSj=null;
 	
-	private Object tblSjFLTitles[]=BeanSjFL.leibietableTitles;//商家分栏信息
-	private Object SjFLtableData[][];
-	private DefaultTableModel tableSjFLModel=new DefaultTableModel();
-	private JTable dataTableSjFLJTable =new JTable(tableSjFLModel);
-	List<BeanSjFL> allSjFLs=null;
-	
 	private void reloadSjTable(){
 		try {
 			allSj=WaiMaiUtil.userSjManager.loadAll();
@@ -79,6 +74,14 @@ public class FrmMainYH extends JFrame{
 		dataTableSjJTable.validate();
 		dataTableSjJTable.repaint();
 	}
+
+	private Object tblSjFLTitles[]=BeanSjFL.leibietableTitles;//商家分栏信息
+	private Object SjFLtableData[][];
+	private DefaultTableModel tableSjFLModel=new DefaultTableModel();
+	private JTable dataTableSjFLJTable =new JTable(tableSjFLModel);
+	private BeanSjFL curSjFL=null;
+	List<BeanSjFL> allSjFLs=null;
+	
 	private void reloadSjFLTable(int idx){
 		if(idx<0) return;
 		curSj=allSj.get(idx);
@@ -98,7 +101,12 @@ public class FrmMainYH extends JFrame{
 		this.dataTableSjFLJTable.validate();
 		this.dataTableSjFLJTable.repaint();
 	}
-	
+
+	private Object tblSpTitles[]=BeanSp.SptableTitles;//商家分栏商品信息
+	private Object SptableData[][];
+	private DefaultTableModel tableSpModel=new DefaultTableModel();
+	private JTable dataTableSpJTable =new JTable(tableSpModel);
+	List<BeanSjFL> allSp=null;
 	
 	
 	
