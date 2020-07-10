@@ -31,7 +31,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JTable;
 
-public class FrmMainYH extends JFrame{
+public class FrmMainCMD_SJ extends JFrame{
 
 	private JPanel contentPane=new JPanel();
 	
@@ -149,6 +149,9 @@ public class FrmMainYH extends JFrame{
 	private JMenuItem menuItem_9_1_1 = new JMenuItem("修改地址");
 	private JMenuItem menuItem_8 = new JMenuItem("删除地址");
 	private JMenu menu_2 = new JMenu("查看商家");
+	private JMenuItem mntmNewMenuItem = new JMenuItem("查看商家详情");
+	private JMenuItem mntmNewMenuItem_2 = new JMenuItem("查看商品分栏");
+	private JMenuItem mntmNewMenuItem_2_2 = new JMenuItem("查看商品详情");
 	private JMenuItem mntmNewMenuItem_2_1 = new JMenuItem("查看商家满减方案");
 	private JMenuItem mntmNewMenuItem_2_1_1 = new JMenuItem("查看商家优惠券");
 	private JMenuItem mntmNewMenuItem_2_1_1_1 = new JMenuItem("查看商家集单政策");
@@ -159,7 +162,7 @@ public class FrmMainYH extends JFrame{
 	private JMenu menu = new JMenu("购买");
 	
 	
-	public FrmMainYH() {
+	public FrmMainCMD_SJ() {
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
 		this.setTitle("外卖管理系统");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -217,6 +220,14 @@ public class FrmMainYH extends JFrame{
 		menu_5.add(menuItem_9_1_1);
 		menu_5.add(menuItem_8);
 		menuBar.add(menu_2);
+		menu_2.add(mntmNewMenuItem);
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				reloadSjTable();
+			}
+		});
+		menu_2.add(mntmNewMenuItem_2);
+		menu_2.add(mntmNewMenuItem_2_2);
 		menu_2.add(mntmNewMenuItem_2_1);		
 		menu_2.add(mntmNewMenuItem_2_1_1);
 		menu_2.add(mntmNewMenuItem_2_1_1_1);
@@ -232,11 +243,11 @@ public class FrmMainYH extends JFrame{
 	    this.dataTableSjJTable.addMouseListener(new MouseAdapter (){
 			@Override
 			public void mouseClicked(MouseEvent e) {//鼠标点击动作，列出右边的列表
-				int i=FrmMainYH.this.dataTableSjJTable.getSelectedRow();
+				int i=FrmMainCMD_SJ.this.dataTableSjJTable.getSelectedRow();
 				if(i<0) {
 					return;
 				}
-				FrmMainYH.this.reloadSjFLTable(i);
+				FrmMainCMD_SJ.this.reloadSjFLTable(i);
 			}
 	    });
 		this.getContentPane().add(new JScrollPane(this.dataTableSjFLJTable), BorderLayout.CENTER);
@@ -244,11 +255,11 @@ public class FrmMainYH extends JFrame{
 	    this.dataTableSjFLJTable.addMouseListener(new MouseAdapter (){
 			@Override
 			public void mouseClicked(MouseEvent e) {//鼠标点击动作，列出右边的列表
-				int i=FrmMainYH.this.dataTableSjFLJTable.getSelectedRow();
+				int i=FrmMainCMD_SJ.this.dataTableSjFLJTable.getSelectedRow();
 				if(i<0) {
 					return;
 				}
-				FrmMainYH.this.reloadSpTable(i);
+				FrmMainCMD_SJ.this.reloadSpTable(i);
 			}
 	    });
 	    this.getContentPane().add(new JScrollPane(this.dataTableSpJTable), BorderLayout.EAST);

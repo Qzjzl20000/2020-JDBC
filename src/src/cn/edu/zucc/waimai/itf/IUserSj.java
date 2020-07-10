@@ -24,5 +24,5 @@ public interface IUserSj {
 	 * @return
 	 * @throws BaseException
 	 */
-	public List<BeanSp> loadAllSp(BeanSj sj,BeanSjFL sjfl)throws BaseException;
+	public List<BeanSp> loadAllSp(BeanSjFL sjfl)throws BaseException;
 }

@@ -87,7 +87,7 @@ public class UserSjManager implements IUserSj {
 
 	}
 	@Override
-	public List<BeanSp> loadAllSp(BeanSj sj,BeanSjFL sjfl)throws BaseException{
+	public List<BeanSp> loadAllSp(BeanSjFL sjfl)throws BaseException{
 		List<BeanSp> result=new ArrayList<BeanSp>();
 		java.sql.Connection conn=null;
 		try {
@@ -95,7 +95,7 @@ public class UserSjManager implements IUserSj {
 			String sql="select * from sp_data"
 					+ " where sj_id = ? and sp_belong_leibie_id=? order by sp_id";
 			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
-			pst.setInt(1,sj.getSj_id());
+			pst.setInt(1,sjfl.getSj_id());
 			pst.setInt(2, sjfl.getLeibie_id());
 			java.sql.ResultSet rs=pst.executeQuery();
 			while(rs.next()) {
