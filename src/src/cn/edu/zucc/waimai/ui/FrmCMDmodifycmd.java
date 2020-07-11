@@ -10,7 +10,6 @@ import javax.swing.border.EmptyBorder;
 
 import src.cn.edu.zucc.waimai.WaiMaiUtil;
 import src.cn.edu.zucc.waimai.model.BeanCMD;
-import src.cn.edu.zucc.waimai.model.BeanUser;
 import src.cn.edu.zucc.waimai.util.BaseException;
 
 import javax.swing.JLabel;
@@ -21,7 +20,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class FrmCMDRegister extends JFrame {
+public class FrmCMDmodifycmd extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -45,7 +44,7 @@ public class FrmCMDRegister extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FrmCMDRegister frame = new FrmCMDRegister();
+					FrmCMDmodifycmd frame = new FrmCMDmodifycmd();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -57,8 +56,8 @@ public class FrmCMDRegister extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FrmCMDRegister() {
-		this.setTitle("系统管理员注册");
+	public FrmCMDmodifycmd() {
+		this.setTitle("系统管理员修改");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 325, 336);
 		contentPane = new JPanel();
@@ -80,16 +79,16 @@ public class FrmCMDRegister extends JFrame {
 		NewLabel_1_2.setBounds(71, 97, 73, 16);
 		contentPane.add(NewLabel_1_2);
 		
-		JLabel NewLabel_2 = new JLabel("新建管理员：");
+		JLabel NewLabel_2 = new JLabel("修改内容：");
 		NewLabel_2.setBounds(27, 149, 96, 16);
 		contentPane.add(NewLabel_2);
 		
-		JLabel NewLabel_1_1_1 = new JLabel("新管理员名");
+		JLabel NewLabel_1_1_1 = new JLabel("修改管理员名");
 		NewLabel_1_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		NewLabel_1_1_1.setBounds(71, 182, 73, 16);
+		NewLabel_1_1_1.setBounds(48, 182, 96, 16);
 		contentPane.add(NewLabel_1_1_1);
 		
-		JLabel NewLabel_1_2_1 = new JLabel("新管理员密码");
+		JLabel NewLabel_1_2_1 = new JLabel("修改管理员密码");
 		NewLabel_1_2_1.setHorizontalAlignment(SwingConstants.RIGHT);
 		NewLabel_1_2_1.setBounds(48, 223, 96, 16);
 		contentPane.add(NewLabel_1_2_1);
@@ -114,7 +113,7 @@ public class FrmCMDRegister extends JFrame {
 		textField_3.setBounds(154, 218, 130, 26);
 		contentPane.add(textField_3);
 		
-		JButton btnNewButton_1 = new JButton("注册");
+		JButton btnNewButton_1 = new JButton("修改");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource()==btnNewButton_1) {
@@ -123,9 +122,9 @@ public class FrmCMDRegister extends JFrame {
 					String username=new String(textField_2.getText());
 					String userpwd=new String(textField_3.getText());
 					try {
-						BeanCMD cmd=WaiMaiUtil.CMDManager.reg(cmduser,cmdpwd,username,userpwd);
+						BeanCMD cmd=WaiMaiUtil.CMDManager.modify(cmduser,cmdpwd,username,userpwd);
 						setVisible(false);
-						JOptionPane.showMessageDialog(null, "管理员添加成功", "系统提示",JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "管理员信息修改成功", "系统提示",JOptionPane.INFORMATION_MESSAGE);
 						
 					} catch (BaseException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);

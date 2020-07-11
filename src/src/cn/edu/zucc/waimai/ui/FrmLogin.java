@@ -1,24 +1,19 @@
 package src.cn.edu.zucc.waimai.ui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
-import java.awt.Frame;
+
 
 import javax.swing.border.EmptyBorder;
 
-import src.cn.*;
 
 
 import src.cn.edu.zucc.waimai.WaiMaiUtil;
+import src.cn.edu.zucc.waimai.model.BeanCMD;
 import src.cn.edu.zucc.waimai.model.BeanUser;
-import src.cn.edu.zucc.waimai.model.BeanUserAdd;
 import src.cn.edu.zucc.waimai.util.BaseException;
 
 import java.awt.*;
 import javax.swing.*;
-import java.security.PublicKey;
-import java.util.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -107,7 +102,27 @@ public class FrmLogin extends JFrame {
 		button_2.setBounds(165, 216, 117, 29);
 		panel.add(button_2);
 		
-		JButton button_3 = new JButton("注册");
+		JButton button_2_1 = new JButton("管理员登陆");
+		button_2_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String userid=textField_2.getText();
+				String pwd=new String(textField_1.getPassword());
+				try {
+					BeanCMD.currentLoginCMD=WaiMaiUtil.CMDManager.login(userid, pwd);
+					FrmCMDchoice dlg=new FrmCMDchoice();
+					dlg.setVisible(true);
+					JOptionPane.showMessageDialog(null, "登陆成功", "系统提示",JOptionPane.INFORMATION_MESSAGE);
+				} catch (BaseException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				setVisible(false);
+			}
+		});
+		button_2_1.setBounds(165, 241, 117, 29);
+		panel.add(button_2_1);
+		
+		JButton button_3 = new JButton("用户注册");
 		button_3.addActionListener((e)-> {
 				FrmYHRegister dlg=new FrmYHRegister();
 				dlg.setFm(this);
@@ -129,9 +144,7 @@ public class FrmLogin extends JFrame {
 		lblNewLabel_4.setBounds(137, 53, 156, 16);
 		panel.add(lblNewLabel_4);
 		
-		JButton button_2_1 = new JButton("管理员登陆");
-		button_2_1.setBounds(165, 241, 117, 29);
-		panel.add(button_2_1);
+		
 		
 		this.setVisible(true);
 		
