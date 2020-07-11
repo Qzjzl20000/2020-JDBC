@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import src.cn.edu.zucc.waimai.itf.IUserManager;
+import src.cn.edu.zucc.waimai.model.BeanOrder;
 import src.cn.edu.zucc.waimai.model.BeanUser;
 import src.cn.edu.zucc.waimai.model.BeanUserAdd;
 import src.cn.edu.zucc.waimai.util.BaseException;
@@ -34,6 +35,49 @@ public class UserManager implements IUserManager {
 				p.setUser_city(rs.getString(7));
 				p.setUser_register_time(rs.getTimestamp(8));
 				p.setUser_vip_end_time(rs.getTimestamp(9));
+				result.add(p);
+			}
+			rs.close();
+			pst.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public List<BeanOrder> loadAllYHOrder()throws BaseException{
+		List<BeanOrder> result=new ArrayList<BeanOrder>();
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select *"
+					+ " from order_data where user_id=? order by order_id";
+			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
+			pst.setInt(1, BeanUser.currentLoginUser.getUser_id());
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next()) {
+				BeanOrder p=new BeanOrder();
+				p.setOrder_id(rs.getInt(1));
+				p.setSj_id(rs.getInt(2));
+				p.setUser_id(rs.getInt(3));
+				p.setQs_id(rs.getInt(4));
+				p.setOrder_origin_money(rs.getFloat(5));
+				p.setOrder_final_money(rs.getFloat(6));
+				p.setMj_id(rs.getInt(7));
+				p.setYouhuiquan_id(rs.getInt(8));
+				p.setOrder_set_time(rs.getTimestamp(9));
+				p.setOrder_set_arrive_time(rs.getTimestamp(10));
+				p.setUser_address_id(rs.getInt(11));
+				p.setOrder_state(rs.getString(12));
 				result.add(p);
 			}
 			rs.close();

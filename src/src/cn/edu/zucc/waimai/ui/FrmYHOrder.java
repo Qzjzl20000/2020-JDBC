@@ -7,8 +7,6 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -19,10 +17,9 @@ import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
 import src.cn.edu.zucc.waimai.WaiMaiUtil;
-import src.cn.edu.zucc.waimai.model.BeanSj;
-import src.cn.edu.zucc.waimai.model.BeanSjFL;
-import src.cn.edu.zucc.waimai.model.BeanSp;
+import src.cn.edu.zucc.waimai.model.BeanOrder;
 import src.cn.edu.zucc.waimai.model.BeanUser;
+import src.cn.edu.zucc.waimai.model.BeanUserAdd;
 import src.cn.edu.zucc.waimai.util.BaseException;
 
 import javax.swing.JMenuBar;
@@ -35,6 +32,7 @@ public class FrmYHOrder extends JFrame{
 
 	private JPanel contentPane=new JPanel();
 	
+
 	/**
 	 * Launch the application.
 	 */
@@ -50,93 +48,42 @@ public class FrmYHOrder extends JFrame{
 		});
 	}
 
-	private Object tblSjTitles[]=BeanSj.SjtableTitles;//商家信息
-	private Object SjtableData[][];
-	private DefaultTableModel tableSjModel=new DefaultTableModel();
-	private JTable dataTableSjJTable =new JTable(tableSjModel);
-	private BeanSj curSj=null;
-	List<BeanSj> allSj=null;
+	private Object tblYHOrderTitles[]=BeanOrder.OrdertableTitles;//用户地址信息
+	private Object YHOrdertableData[][];
+	private DefaultTableModel tableYHOrderModel=new DefaultTableModel();
+	private JTable dataTableYHOrderJTable =new JTable(tableYHOrderModel);
+	List<BeanOrder> allYHOrder=null;
 	
-	private void reloadSjTable(){
+	private void reloadYHOrderTable(){
 		try {
-			allSj=WaiMaiUtil.userSjManager.loadAll();
+			allYHOrder=WaiMaiUtil.userManager.loadAllYHOrder();
 		} catch (BaseException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		SjtableData =new Object[allSj.size()][BeanSj.SjtableTitles.length];
-		for(int i=0;i<allSj.size();i++) {
-			for(int j=0;j<BeanSj.SjtableTitles.length;j++) {
-				SjtableData[i][j]=allSj.get(i).getCell(j);
+		YHOrdertableData =new Object[allYHOrder.size()][BeanOrder.OrdertableTitles.length];
+		for(int i=0;i<allYHOrder.size();i++) {
+			for(int j=0;j<BeanOrder.OrdertableTitles.length;j++) {
+				YHOrdertableData[i][j]=allYHOrder.get(i).getCell(j);
 			}
 		}
-		tableSjModel.setDataVector(SjtableData, tblSjTitles);
-		dataTableSjJTable.validate();
-		dataTableSjJTable.repaint();
+		tableYHOrderModel.setDataVector(YHOrdertableData, tblYHOrderTitles);
+		dataTableYHOrderJTable.validate();
+		dataTableYHOrderJTable.repaint();
 	}
 
-	private Object tblSjFLTitles[]=BeanSjFL.leibietableTitles;//商家分栏信息
-	private Object SjFLtableData[][];
-	private DefaultTableModel tableSjFLModel=new DefaultTableModel();
-	private JTable dataTableSjFLJTable =new JTable(tableSjFLModel);
-	private BeanSjFL curSjFL=null;
-	List<BeanSjFL> allSjFLs=null;
-	
-	private void reloadSjFLTable(int idx){
-		if(idx<0) return;
-		curSj=allSj.get(idx);
-		try {
-			allSjFLs=WaiMaiUtil.userSjManager.loadAlllB(curSj);
-		} catch (BaseException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
-			return;
-		}
-		SjFLtableData =new Object[allSjFLs.size()][BeanSjFL.leibietableTitles.length];
-		for(int i=0;i<allSjFLs.size();i++){
-			for(int j=0;j<BeanSjFL.leibietableTitles.length;j++)
-				SjFLtableData[i][j]=allSjFLs.get(i).getCell(j);
-		}
-		
-		tableSjFLModel.setDataVector(SjFLtableData,tblSjFLTitles);
-		this.dataTableSjFLJTable.validate();
-		this.dataTableSjFLJTable.repaint();
-	}
-
-	private Object tblSpTitles[]=BeanSp.SptableTitles;//商家分栏商品信息
-	private Object SptableData[][];
-	private DefaultTableModel tableSpModel=new DefaultTableModel();
-	private JTable dataTableSpJTable =new JTable(tableSpModel);
-	List<BeanSp> allSp=null;
-	private void reloadSpTable(int idx){
-		if(idx<0) return;
-		curSjFL=allSjFLs.get(idx);
-		try {
-			allSp=WaiMaiUtil.userSjManager.loadAllSp(curSjFL);
-		} catch (BaseException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
-			return;
-		}
-		SptableData =new Object[allSp.size()][BeanSp.SptableTitles.length];
-		for(int i=0;i<allSp.size();i++){
-			for(int j=0;j<BeanSp.SptableTitles.length;j++)
-				SptableData[i][j]=allSp.get(i).getCell(j);
-		}
-		
-		tableSpModel.setDataVector(SptableData,tblSpTitles);
-		this.dataTableSpJTable.validate();
-		this.dataTableSpJTable.repaint();
-	}
-	
 	
 	
 	
 	private JMenuBar menuBar = new JMenuBar();
-	private JMenu menu_1 = new JMenu("查看订单详情");
-	private JMenuItem menuItem_7_1_1 = new JMenuItem("查看所有订单");
-	private JMenuItem menuItem_7 = new JMenuItem("已取消的订单");
-	private JMenuItem menuItem_7_1 = new JMenuItem("正在进行的订单");
-	private JMenuItem menuItem = new JMenuItem("已完成的订单");
-	
+	private JMenu menu_4 = new JMenu("返回");
+	private JMenuItem menuItem_2 = new JMenuItem("返回主界面");
+	private JMenu menu_5 = new JMenu("管理用户订单");
+	private JMenuItem menuItem_7 = new JMenuItem("查看订单（刷新）");
+	private JMenuItem menuItem_6 = new JMenuItem("查看取消的订单");
+	private JMenuItem menuItem_9_1_1 = new JMenuItem("查看正在进行的订单");
+	private JMenuItem menuItem_8 = new JMenuItem("查看已完成的订单");
+
 	
 	
 	public FrmYHOrder() {
@@ -144,47 +91,40 @@ public class FrmYHOrder extends JFrame{
 		this.setTitle("外卖管理系统-查看订单");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setJMenuBar(menuBar);
-		menuBar.add(menu_1);
-		menu_1.add(menuItem_7_1_1);
-		menuItem_7_1_1.addActionListener(new ActionListener() {
+		
+		
+		menuBar.add(menu_4);
+		menuBar.add(menu_5);
+		
+		menu_4.add(menuItem_2);
+		menuItem_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				FrmMainYH dlg=new FrmMainYH();
+				dlg.setVisible(true);
+				setVisible(false);
 			}
 		});
-		menu_1.add(menuItem_7);
+		
+		menu_5.add(menuItem_7);
 		menuItem_7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				reloadYHOrderTable();
 			}
 		});
-		menu_1.add(menuItem_7_1);
-		menuItem_7_1.addActionListener(new ActionListener() {
+		menu_5.add(menuItem_6);
+		menuItem_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 			}
 		});
-		menu_1.add(menuItem);
-		menuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
+		menu_5.add(menuItem_9_1_1);
+		menu_5.add(menuItem_8);
 		
 		
-		this.getContentPane().add(new JScrollPane(this.dataTableSjJTable), BorderLayout.WEST);
-		//JScrollPane 滚动条
-	    this.dataTableSjJTable.addMouseListener(new MouseAdapter (){
-			@Override
-			public void mouseClicked(MouseEvent e) {//鼠标点击动作，列出右边的列表
-				int i=FrmYHOrder.this.dataTableSjJTable.getSelectedRow();
-				if(i<0) {
-					return;
-				}
-				FrmYHOrder.this.reloadSjFLTable(i);
-			}
-	    });
+		this.getContentPane().add(new JScrollPane(this.dataTableYHOrderJTable), BorderLayout.CENTER);
 		
-		this.reloadSjTable();//初始展现商家信息
+		
+		this.reloadYHOrderTable();//初始展现商家信息
 		//状态栏
 		contentPane.setLayout(new FlowLayout(FlowLayout.LEFT));
 		JLabel label=new JLabel("欢迎您，尊敬的"+BeanUser.currentLoginUser.getUser_name()+"用户！");

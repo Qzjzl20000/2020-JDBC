@@ -14,8 +14,8 @@ public class BeanOrder {
 	private float Order_final_money;
 	private int Mj_id;
 	private int youhuiquan_id;
-	private Timestamp Order_set_time;
-	private Timestamp Order_set_arrive_time;
+	private java.sql.Timestamp Order_set_time;
+	private java.sql.Timestamp Order_set_arrive_time;
 	private int User_address_id;
 	private String Order_state;
 	public String getCell(int col){
@@ -83,16 +83,16 @@ public class BeanOrder {
 	public void setYouhuiquan_id(int youhuiquan_id) {
 		this.youhuiquan_id = youhuiquan_id;
 	}
-	public Timestamp getOrder_set_time() {
+	public java.sql.Timestamp getOrder_set_time() {
 		return Order_set_time;
 	}
-	public void setOrder_set_time(Timestamp order_set_time) {
-		Order_set_time = order_set_time;
+	public void setOrder_set_time(java.sql.Timestamp timestamp) {
+		Order_set_time = timestamp;
 	}
-	public Timestamp getOrder_set_arrive_time() {
+	public java.sql.Timestamp getOrder_set_arrive_time() {
 		return Order_set_arrive_time;
 	}
-	public void setOrder_set_arrive_time(Timestamp order_set_arrive_time) {
+	public void setOrder_set_arrive_time(java.sql.Timestamp order_set_arrive_time) {
 		Order_set_arrive_time = order_set_arrive_time;
 	}
 	public int getUser_address_id() {

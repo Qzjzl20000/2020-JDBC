@@ -2,6 +2,7 @@ package src.cn.edu.zucc.waimai.itf;
 
 import java.util.List;
 
+import src.cn.edu.zucc.waimai.model.BeanOrder;
 import src.cn.edu.zucc.waimai.model.BeanUser;
 import src.cn.edu.zucc.waimai.model.BeanUserAdd;
 import src.cn.edu.zucc.waimai.util.BaseException;
@@ -13,6 +14,12 @@ public interface IUserManager {
 	 * @throws BaseException
 	 */
 	public List<BeanUser> loadAll(String name)throws BaseException;
+	/**
+	 * 提取当前所有用户地址信息
+	 * @return
+	 * @throws BaseException
+	 */
+	public List<BeanOrder> loadAllYHOrder()throws BaseException;
 	/**
 	 * 提取当前所有用户地址信息
 	 * @return

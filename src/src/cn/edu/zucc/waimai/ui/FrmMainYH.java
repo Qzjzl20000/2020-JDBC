@@ -167,6 +167,11 @@ public class FrmMainYH extends JFrame{
 		setJMenuBar(menuBar);
 		menuBar.add(menu_1);
 		menu_1.add(menuItem_7_1_1);
+		menuItem_7_1_1.addActionListener((e)-> {
+			FrmYHOrder dlg=new FrmYHOrder();
+			dlg.setVisible(true);
+			setVisible(false);
+		});
 		menu_1.add(menuItem_7);
 		menu_1.add(menuItem_7_1);
 		menu_1.add(menuItem);
