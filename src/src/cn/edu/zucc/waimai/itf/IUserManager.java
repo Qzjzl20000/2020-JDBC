@@ -15,6 +15,12 @@ public interface IUserManager {
 	 */
 	public List<BeanUser> loadAll()throws BaseException;
 	/**
+	 * 购买vip
+	 * @return
+	 * @throws BaseException
+	 */
+	public void BuyVIP(String year)throws BaseException;
+	/**
 	 * 提取当前所有订单信息
 	 * @return
 	 * @throws BaseException

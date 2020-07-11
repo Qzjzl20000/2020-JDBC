@@ -1,6 +1,8 @@
 package src.cn.edu.zucc.waimai.comtrol.example;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +43,62 @@ public class UserManager implements IUserManager {
 			rs.close();
 			pst.close();
 			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public void BuyVIP(String year)throws BaseException{
+		java.sql.Connection conn =null;
+		Timestamp timestamp = null;
+		try {
+			int Intyear=Integer.parseInt(year);
+			if(BeanUser.currentLoginUser.getUser_vip_end_time().before(Timestamp.valueOf("2010-01-01 00:00:00"))) {
+				conn=DBUtil.getConnection();
+				String sql="select ADDDATE(now(),interval ? year)";
+				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+				pst.setInt(1, Intyear);
+				java.sql.ResultSet rs=pst.executeQuery();
+				while(rs.next())
+					 timestamp=rs.getTimestamp(1);
+				rs.close();
+				pst.close();
+				sql="update user_data set user_vip_end_time=? where user_id=?";
+				pst=conn.prepareStatement(sql);
+				pst.setTimestamp(1, timestamp);
+				pst.setInt(2, BeanUser.currentLoginUser.getUser_id());
+				pst.execute();
+				pst.close();
+			}else {
+				conn=DBUtil.getConnection();
+				String sql="select ADDDATE(?,interval ? year)";
+				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+				pst.setTimestamp(1, BeanUser.currentLoginUser.getUser_vip_end_time());
+				pst.setInt(2, Intyear);
+				java.sql.ResultSet rs=pst.executeQuery();
+				while(rs.next())
+					 timestamp=rs.getTimestamp(1);
+				rs.close();
+				pst.close();
+				sql="update user_data set user_vip_end_time=? where user_id=?";
+				pst=conn.prepareStatement(sql);
+				pst.setTimestamp(1, timestamp);
+				pst.setInt(2, BeanUser.currentLoginUser.getUser_id());
+				pst.execute();
+				pst.close();
+			}
+				
+				
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DbException(e);
@@ -219,19 +277,26 @@ public class UserManager implements IUserManager {
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select user_id,user_name,user_pwd from user_data where user_name=? and user_pwd=?";
+			String sql="select user_id,user_name,user_sex,user_pwd,user_phonenum,user_email,user_city,user_register_time,user_vip_end_time"
+					+ " from user_data where user_name=? and user_pwd=?";
 			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
 			pst.setString(1, username);
 			pst.setString(2, pwd);
 			java.sql.ResultSet rs= pst.executeQuery();
 			if(rs.next()) {
-				BeanUser bu=new BeanUser();
-				bu.setUser_id(rs.getInt(1));//获取用户编号
-				bu.setUser_name(username);
-				bu.setUser_pwd(pwd);
+				BeanUser p=new BeanUser();
+				p.setUser_id(rs.getInt(1));
+				p.setUser_name(rs.getString(2));
+				p.setUser_sex(rs.getInt(3));
+				p.setUser_pwd(rs.getString(4));
+				p.setUser_phonenum(rs.getString(5));
+				p.setUser_email(rs.getString(6));
+				p.setUser_city(rs.getString(7));
+				p.setUser_register_time(rs.getTimestamp(8));
+				p.setUser_vip_end_time(rs.getTimestamp(9));
 				pst.close();
 				rs.close();
-				return bu;
+				return p;
 			}else {
 				throw new BusinessException("账号或密码错误");
 			}

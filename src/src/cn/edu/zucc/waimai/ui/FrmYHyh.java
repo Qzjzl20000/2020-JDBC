@@ -65,7 +65,6 @@ public class FrmYHyh extends JFrame{
 		for(int i=0;i<allYHyh.size();i++) {
 			for(int j=0;j<BeanUser.UsertableTitles.length;j++) {
 				YHyhtableData[i][j]=allYHyh.get(i).getCell(j);
-				System.out.println(allYHyh.get(i).getCell(j));
 			}
 		}
 		tableYHyhModel.setDataVector(YHyhtableData, tblYHyhTitles);
@@ -82,7 +81,8 @@ public class FrmYHyh extends JFrame{
 	private JMenu menu_4 = new JMenu("返回");
 	private JMenuItem menuItem_2 = new JMenuItem("返回主界面");
 	private JMenu menu_5 = new JMenu("查看用户信息");
-	private JMenuItem menuItem_7 = new JMenuItem("查看会员信息");
+	private JMenuItem menuItem_7 = new JMenuItem("查看信息（刷新）");
+	private JMenuItem menuItem_10 = new JMenuItem("查看会员信息");
 	private JMenuItem menuItem_6 = new JMenuItem("修改密码");
 	private JMenuItem menuItem_9_1_1 = new JMenuItem("修改手机号");
 	private JMenuItem menuItem_8 = new JMenuItem("修改邮箱");
@@ -110,6 +110,13 @@ public class FrmYHyh extends JFrame{
 		menuItem_7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				reloadYHyhTable();
+			}
+		});
+		menu_5.add(menuItem_10);
+		menuItem_10.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FrmVIP dlg=new FrmVIP();
+				dlg.setVisible(true);
 			}
 		});
 		menu_5.add(menuItem_6);
