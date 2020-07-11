@@ -1,5 +1,6 @@
 package src.cn.edu.zucc.waimai.model;
 
+import java.sql.Timestamp;
 
 public class BeanUser {
 	public static BeanUser currentLoginUser;
@@ -29,7 +30,7 @@ public class BeanUser {
 		else if(col==6) return ""+this.getUser_city();
 		else if(col==7) return ""+this.getUser_register_time();
 		else if(col==8) {
-			if(this.getUser_vip_end_time().equals("")) {
+			if(this.getUser_vip_end_time().before(Timestamp.valueOf("2010-03-02 16:48:41"))) {
 				return "Not VIP";
 			}
 			else return "VIP until "+this.getUser_vip_end_time();

@@ -9,13 +9,13 @@ import src.cn.edu.zucc.waimai.util.BaseException;
 
 public interface IUserManager {
 	/**
-	 * 提取当前所有商家信息
+	 * 提取当前所有用户信息
 	 * @return
 	 * @throws BaseException
 	 */
-	public List<BeanUser> loadAll(String name)throws BaseException;
+	public List<BeanUser> loadAll()throws BaseException;
 	/**
-	 * 提取当前所有用户地址信息
+	 * 提取当前所有订单信息
 	 * @return
 	 * @throws BaseException
 	 */

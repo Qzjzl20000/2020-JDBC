@@ -133,21 +133,10 @@ public class FrmMainYH extends JFrame{
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu menu_1 = new JMenu("查看订单详情");
 	private JMenuItem menuItem_7_1_1 = new JMenuItem("查看所有订单");
-	private JMenuItem menuItem_7 = new JMenuItem("已取消的订单");
-	private JMenuItem menuItem_7_1 = new JMenuItem("正在进行的订单");
-	private JMenuItem menuItem = new JMenuItem("已完成的订单");
 	private JMenu menu_6 = new JMenu("管理用户信息");
 	private JMenuItem menuItem_1 = new JMenuItem("查看用户信息");
-	private JMenuItem menuItem_5_1 = new JMenuItem("查看会员信息");
-	private JMenuItem menuItem_2 = new JMenuItem("修改密码");
-	private JMenuItem menuItem_3 = new JMenuItem("修改手机号码");
-	private JMenuItem menuItem_4 = new JMenuItem("修改邮箱");
-	private JMenuItem menuItem_5 = new JMenuItem("修改所在城市");
 	private JMenu menu_5 = new JMenu("管理用户地址");
-	private JMenuItem menuItem_6 = new JMenuItem("添加地址");
 	private JMenuItem menuItem_9 = new JMenuItem("查看所有地址");
-	private JMenuItem menuItem_9_1_1 = new JMenuItem("修改地址");
-	private JMenuItem menuItem_8 = new JMenuItem("删除地址");
 	private JMenu menu_2 = new JMenu("查看商家");
 	private JMenuItem mntmNewMenuItem_2_1_22 = new JMenuItem("查看商家（刷新）");
 	private JMenuItem mntmNewMenuItem_2_1 = new JMenuItem("查看商家满减方案");
@@ -158,7 +147,8 @@ public class FrmMainYH extends JFrame{
 	private JMenu menu_4 = new JMenu("查看集单进度");
 	private JMenuItem mntmNewMenuItem_1_1 = new JMenuItem("查看集单进度");
 	private JMenu menu = new JMenu("购买");
-	
+	private JMenuItem menuItem_10 =new JMenuItem("加入购物车");
+	private JMenuItem menuItem_11 =new JMenuItem("购买");
 	
 	public FrmMainYH() {
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -172,45 +162,15 @@ public class FrmMainYH extends JFrame{
 			dlg.setVisible(true);
 			setVisible(false);
 		});
-		menu_1.add(menuItem_7);
-		menu_1.add(menuItem_7_1);
-		menu_1.add(menuItem);
+		
 		menuBar.add(menu_6);
 		menu_6.add(menuItem_1);
-		menuItem_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
+		menuItem_1.addActionListener((e)-> {
+			FrmYHyh dlg=new FrmYHyh();
+			dlg.setVisible(true);
+			setVisible(false);
 		});
-		menu_6.add(menuItem_5_1);
-		menu_6.add(menuItem_2);
-		menuItem_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				FrmYHModifyPwd dlg=new FrmYHModifyPwd();
-				dlg.setVisible(true);
-			}
-		});
-		menu_6.add(menuItem_3);
-		menuItem_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				FrmYHModifyPhonenum dlg=new FrmYHModifyPhonenum();
-				dlg.setVisible(true);
-			}
-		});
-		menu_6.add(menuItem_4);
-		menuItem_4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				FrmYHModifyEmail dlg=new FrmYHModifyEmail();
-				dlg.setVisible(true);
-			}
-		});
-		menu_6.add(menuItem_5);
-		menuItem_5.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				FrmYHModifyCity dlg=new FrmYHModifyCity();
-				dlg.setVisible(true);
-			}
-		});
+		
 		menuBar.add(menu_5);
 		menu_5.add(menuItem_9);
 		menuItem_9.addActionListener((e)-> {
@@ -218,15 +178,6 @@ public class FrmMainYH extends JFrame{
 			dlg.setVisible(true);
 			setVisible(false);
 		});
-		menu_5.add(menuItem_6);
-		menuItem_6.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				FrmYHAddRegister dlg=new FrmYHAddRegister();
-				dlg.setVisible(true);
-			}
-		});
-		menu_5.add(menuItem_9_1_1);
-		menu_5.add(menuItem_8);
 		menuBar.add(menu_2);
 		menu_2.add(mntmNewMenuItem_2_1_22);
 		mntmNewMenuItem_2_1_22.addActionListener(new ActionListener() {
@@ -242,7 +193,8 @@ public class FrmMainYH extends JFrame{
 		menuBar.add(menu_4);
 		menu_4.add(mntmNewMenuItem_1_1);
 		menuBar.add(menu);
-		
+		menu.add(menuItem_10);
+		menu.add(menuItem_11);
 		
 		this.getContentPane().add(new JScrollPane(this.dataTableSjJTable), BorderLayout.WEST);
 		//JScrollPane 滚动条

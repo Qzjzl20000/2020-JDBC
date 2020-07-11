@@ -15,14 +15,15 @@ import src.cn.edu.zucc.waimai.util.DbException;
 
 public class UserManager implements IUserManager {
 	@Override
-	public List<BeanUser> loadAll(String name)throws BaseException{
+	public List<BeanUser> loadAll()throws BaseException{
 		List<BeanUser> result=new ArrayList<BeanUser>();
 		java.sql.Connection conn =null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from user_data where user_name=? order by user_id";
+			String sql="select user_id,user_name,user_sex,user_pwd,user_phonenum,user_email,user_city,user_register_time,user_vip_end_time"
+					+ " from user_data where user_id=? ";
 			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
-			pst.setString(1, name);
+			pst.setInt(1, BeanUser.currentLoginUser.getUser_id());
 			java.sql.ResultSet rs=pst.executeQuery();
 			while(rs.next()) {
 				BeanUser p=new BeanUser();

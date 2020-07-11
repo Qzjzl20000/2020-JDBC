@@ -18,7 +18,6 @@ import javax.swing.table.DefaultTableModel;
 
 import src.cn.edu.zucc.waimai.WaiMaiUtil;
 import src.cn.edu.zucc.waimai.model.BeanUser;
-import src.cn.edu.zucc.waimai.model.BeanUserAdd;
 import src.cn.edu.zucc.waimai.util.BaseException;
 
 import javax.swing.JMenuBar;
@@ -27,7 +26,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JTable;
 
-public class FrmYHadd extends JFrame{
+public class FrmYHyh extends JFrame{
 
 	private JPanel contentPane=new JPanel();
 	
@@ -47,28 +46,33 @@ public class FrmYHadd extends JFrame{
 		});
 	}
 
-	private Object tblYHaddTitles[]=BeanUserAdd.UserAddtableTitles;//用户地址信息
-	private Object YHaddtableData[][];
-	private DefaultTableModel tableYHaddModel=new DefaultTableModel();
-	private JTable dataTableYHaddJTable =new JTable(tableYHaddModel);
-	List<BeanUserAdd> allYHadd=null;
+	private Object tblYHyhTitles[]=BeanUser.UsertableTitles;//用户地址信息
+	private Object YHyhtableData[][];
+	private DefaultTableModel tableYHyhModel=new DefaultTableModel();
+	private JTable dataTableYHyhJTable =new JTable(tableYHyhModel);
+	List<BeanUser> allYHyh=null;
 	
-	private void reloadYHaddTable(){
+	private void reloadYHyhTable(){
 		try {
-			allYHadd=WaiMaiUtil.userManager.loadAllYHadd();
+			
+			allYHyh=WaiMaiUtil.userManager.loadAll();
 		} catch (BaseException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		YHaddtableData =new Object[allYHadd.size()][BeanUserAdd.UserAddtableTitles.length];
-		for(int i=0;i<allYHadd.size();i++) {
-			for(int j=0;j<BeanUserAdd.UserAddtableTitles.length;j++) {
-				YHaddtableData[i][j]=allYHadd.get(i).getCell(j);
+		YHyhtableData =new Object[allYHyh.size()][BeanUser.UsertableTitles.length];
+		
+		for(int i=0;i<allYHyh.size();i++) {
+			for(int j=0;j<BeanUser.UsertableTitles.length;j++) {
+				YHyhtableData[i][j]=allYHyh.get(i).getCell(j);
+				System.out.println(allYHyh.get(i).getCell(j));
 			}
 		}
-		tableYHaddModel.setDataVector(YHaddtableData, tblYHaddTitles);
-		dataTableYHaddJTable.validate();
-		dataTableYHaddJTable.repaint();
+		tableYHyhModel.setDataVector(YHyhtableData, tblYHyhTitles);
+		dataTableYHyhJTable.validate();
+		dataTableYHyhJTable.repaint();
+
+		
 	}
 
 	
@@ -77,17 +81,17 @@ public class FrmYHadd extends JFrame{
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu menu_4 = new JMenu("返回");
 	private JMenuItem menuItem_2 = new JMenuItem("返回主界面");
-	private JMenu menu_5 = new JMenu("管理用户地址");
-	private JMenuItem menuItem_7 = new JMenuItem("查看地址（刷新）");
-	private JMenuItem menuItem_6 = new JMenuItem("添加地址");
-	private JMenuItem menuItem_9_1_1 = new JMenuItem("修改地址");
-	private JMenuItem menuItem_8 = new JMenuItem("删除地址");
-
+	private JMenu menu_5 = new JMenu("查看用户信息");
+	private JMenuItem menuItem_7 = new JMenuItem("查看会员信息");
+	private JMenuItem menuItem_6 = new JMenuItem("修改密码");
+	private JMenuItem menuItem_9_1_1 = new JMenuItem("修改手机号");
+	private JMenuItem menuItem_8 = new JMenuItem("修改邮箱");
+	private JMenuItem menuItem_9 = new JMenuItem("修改城市");
 	
 	
-	public FrmYHadd() {
+	public FrmYHyh() {
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
-		this.setTitle("外卖管理系统-查看地址");
+		this.setTitle("外卖管理系统-查看用户信息");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setJMenuBar(menuBar);
 		menuBar.add(menu_4);
@@ -105,24 +109,42 @@ public class FrmYHadd extends JFrame{
 		menu_5.add(menuItem_7);
 		menuItem_7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				reloadYHaddTable();
+				reloadYHyhTable();
 			}
 		});
 		menu_5.add(menuItem_6);
 		menuItem_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FrmYHAddRegister dlg=new FrmYHAddRegister();
+				FrmYHModifyPwd dlg=new FrmYHModifyPwd();
 				dlg.setVisible(true);
 			}
 		});
 		menu_5.add(menuItem_9_1_1);
+		menuItem_9_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FrmYHModifyPhonenum dlg=new FrmYHModifyPhonenum();
+				dlg.setVisible(true);
+			}
+		});
 		menu_5.add(menuItem_8);
+		menuItem_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FrmYHModifyEmail dlg=new FrmYHModifyEmail();
+				dlg.setVisible(true);
+			}
+		});
+		menu_5.add(menuItem_9);
+		menuItem_9.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FrmYHModifyCity dlg=new FrmYHModifyCity();
+				dlg.setVisible(true);
+			}
+		});
+		
+		this.getContentPane().add(new JScrollPane(this.dataTableYHyhJTable), BorderLayout.CENTER);
 		
 		
-		this.getContentPane().add(new JScrollPane(this.dataTableYHaddJTable), BorderLayout.CENTER);
-		
-		
-		this.reloadYHaddTable();//初始展现商家信息
+		this.reloadYHyhTable();//初始展现用户信息
 		//状态栏
 		contentPane.setLayout(new FlowLayout(FlowLayout.LEFT));
 		JLabel label=new JLabel("欢迎您，尊敬的"+BeanUser.currentLoginUser.getUser_name()+"用户！");
