@@ -149,6 +149,7 @@ public class FrmMainYH extends JFrame{
 	private JMenuItem menuItem_9_1_1 = new JMenuItem("修改地址");
 	private JMenuItem menuItem_8 = new JMenuItem("删除地址");
 	private JMenu menu_2 = new JMenu("查看商家");
+	private JMenuItem mntmNewMenuItem_2_1_22 = new JMenuItem("查看商家（刷新）");
 	private JMenuItem mntmNewMenuItem_2_1 = new JMenuItem("查看商家满减方案");
 	private JMenuItem mntmNewMenuItem_2_1_1 = new JMenuItem("查看商家优惠券");
 	private JMenuItem mntmNewMenuItem_2_1_1_1 = new JMenuItem("查看商家集单政策");
@@ -206,6 +207,12 @@ public class FrmMainYH extends JFrame{
 			}
 		});
 		menuBar.add(menu_5);
+		menu_5.add(menuItem_9);
+		menuItem_9.addActionListener((e)-> {
+			FrmYHadd dlg=new FrmYHadd();
+			dlg.setVisible(true);
+			setVisible(false);
+		});
 		menu_5.add(menuItem_6);
 		menuItem_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -213,10 +220,15 @@ public class FrmMainYH extends JFrame{
 				dlg.setVisible(true);
 			}
 		});
-		menu_5.add(menuItem_9);
 		menu_5.add(menuItem_9_1_1);
 		menu_5.add(menuItem_8);
 		menuBar.add(menu_2);
+		menu_2.add(mntmNewMenuItem_2_1_22);
+		mntmNewMenuItem_2_1_22.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				reloadSjTable();
+			}
+		});
 		menu_2.add(mntmNewMenuItem_2_1);		
 		menu_2.add(mntmNewMenuItem_2_1_1);
 		menu_2.add(mntmNewMenuItem_2_1_1_1);

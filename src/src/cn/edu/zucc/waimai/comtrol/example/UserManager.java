@@ -52,7 +52,44 @@ public class UserManager implements IUserManager {
 			}
 		}
 	}
-	
+	@Override
+	public List<BeanUserAdd> loadAllYHadd()throws BaseException{
+		List<BeanUserAdd> result=new ArrayList<BeanUserAdd>();
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select user_id,user_province,user_city,user_area,user_address_detail,user_ad_name,user_ad_phonenum"
+					+ " from user_address where user_id=? order by user_address_id";
+			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
+			pst.setInt(1, BeanUser.currentLoginUser.getUser_id());
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next()) {
+				BeanUserAdd p=new BeanUserAdd();
+				p.setUser_id(rs.getInt(1));
+				p.setUser_province(rs.getString(2));
+				p.setUser_city(rs.getString(3));
+				p.setUser_area(rs.getString(4));
+				p.setUser_add_detail(rs.getString(5));
+				p.setUser_add_name(rs.getString(6));
+				p.setUser_add_phonenum(rs.getString(7));
+				result.add(p);
+			}
+			rs.close();
+			pst.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	@Override
 	public BeanUser reg(String username,int usersex, String pwd,String pwd2,String userphonenum,
 			String usere_mail,String usercity) throws BaseException{

@@ -14,6 +14,12 @@ public interface IUserManager {
 	 */
 	public List<BeanUser> loadAll(String name)throws BaseException;
 	/**
+	 * 提取当前所有用户地址信息
+	 * @return
+	 * @throws BaseException
+	 */
+	public List<BeanUserAdd> loadAllYHadd()throws BaseException;
+	/**
 	 * 注册：
 	 * 要求用户名不能重复，不能为空
 	 * 两次输入的密码必须一致，密码不能为空

@@ -141,6 +141,7 @@ public class FrmCMDmodifycmd extends JFrame {
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
+				fm.setEnabled(true);
 			}
 		});
 		btnNewButton_2.setBounds(83, 266, 117, 29);
