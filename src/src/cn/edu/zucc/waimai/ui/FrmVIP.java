@@ -61,7 +61,7 @@ public class FrmVIP extends JFrame {
 		if(BeanUser.currentLoginUser.getUser_vip_end_time().before(Timestamp.valueOf("2010-01-01 00:00:00"))) {
 			s="还不是会员，如需购买<br/><br/>请点击“购买”键购买会员时长";
 		}else {
-			s="是我们尊贵的会员，会员截止至<br/>"+BeanUser.currentLoginUser.getUser_vip_end_time()+"<br/>如需购买请请点击“购买”键续费";
+			s="是我们菜地地尊贵的会员，<br/>会员截止至"+BeanUser.currentLoginUser.getUser_vip_end_time()+"<br/>如需购买请点击“购买”键续费";
 		}
 		JLabel lblNewLabel_1 = new JLabel("<html>您好！您"+s+ "<html>");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);

@@ -6,7 +6,10 @@ import java.util.List;
 
 import src.cn.edu.zucc.waimai.itf.ICMD;
 import src.cn.edu.zucc.waimai.model.BeanCMD;
+import src.cn.edu.zucc.waimai.model.BeanQs;
+import src.cn.edu.zucc.waimai.model.BeanQsbill;
 import src.cn.edu.zucc.waimai.model.BeanSj;
+import src.cn.edu.zucc.waimai.model.BeanSjFL;
 import src.cn.edu.zucc.waimai.model.BeanUser;
 import src.cn.edu.zucc.waimai.util.BaseException;
 import src.cn.edu.zucc.waimai.util.BusinessException;
@@ -14,6 +17,77 @@ import src.cn.edu.zucc.waimai.util.DBUtil;
 import src.cn.edu.zucc.waimai.util.DbException;
 
 public class CMDManager implements ICMD {
+	@Override
+	public List<BeanQs> loadAllQS()throws BaseException{
+		List<BeanQs> result=new ArrayList<BeanQs>();
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from qs_data";
+			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next()) {
+				BeanQs p=new BeanQs();
+				p.setQs_id(rs.getInt(1));
+				p.setQs_name(rs.getString(2));
+				p.setQs_join_date(rs.getTimestamp(3));
+				p.setQs_grade(rs.getString(4));
+				result.add(p);
+			}
+			rs.close();
+			pst.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public List<BeanQsbill> loadAllQSbill(BeanQs qs)throws BaseException{
+		List<BeanQsbill> result=new ArrayList<BeanQsbill>();
+		java.sql.Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from qs_bill"
+					+ " where qs_id = ?";
+			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
+			pst.setInt(1,qs.getQs_id());
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next()) {
+				BeanQsbill p=new BeanQsbill();
+				p.setQs_id(rs.getInt(1));
+				p.setOrder_id(rs.getInt(2));
+				p.setQs_getmoney_time(rs.getTimestamp(3));
+				p.setQs_getmoney(rs.getFloat(4));
+				p.setSp_evaluate_qsxinji(rs.getInt(5));
+				result.add(p);
+			}
+			rs.close();
+			pst.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	@Override
 	public BeanCMD login(String username,String pwd)throws BaseException{
 		if(username.equals("")) {

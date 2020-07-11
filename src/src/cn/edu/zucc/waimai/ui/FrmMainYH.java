@@ -185,7 +185,8 @@ public class FrmMainYH extends JFrame{
 				reloadSjTable();
 			}
 		});
-		menu_2.add(mntmNewMenuItem_2_1);		
+		menu_2.add(mntmNewMenuItem_2_1);
+		
 		menu_2.add(mntmNewMenuItem_2_1_1);
 		menu_2.add(mntmNewMenuItem_2_1_1_1);
 		menuBar.add(menu_3);

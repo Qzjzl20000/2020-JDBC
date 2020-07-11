@@ -2,7 +2,6 @@ package src.cn.edu.zucc.waimai.comtrol.example;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 

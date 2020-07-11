@@ -1,16 +1,11 @@
 package src.cn.edu.zucc.waimai.ui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import src.cn.edu.zucc.waimai.WaiMaiUtil;
-import src.cn.edu.zucc.waimai.model.BeanCMD;
-import src.cn.edu.zucc.waimai.util.BaseException;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -50,6 +45,14 @@ public class FrmCMDchoice extends JFrame {
 		JButton btnNewButton = new JButton("点击管理骑手");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					Frmqs dlg=new Frmqs();
+					dlg.setVisible(true);
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				setVisible(false);
 			}
 		});
 		btnNewButton.setBounds(67, 192, 164, 51);

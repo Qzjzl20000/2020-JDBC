@@ -4,9 +4,24 @@ package src.cn.edu.zucc.waimai.itf;
 import java.util.List;
 
 import src.cn.edu.zucc.waimai.model.BeanCMD;
+import src.cn.edu.zucc.waimai.model.BeanQs;
+import src.cn.edu.zucc.waimai.model.BeanQsbill;
 import src.cn.edu.zucc.waimai.util.BaseException;
 
 public interface ICMD {
+	
+	/**
+	 * 提取当前所有骑手信息
+	 * @return
+	 * @throws BaseException
+	 */
+	public List<BeanQs> loadAllQS()throws BaseException;
+	/**
+	 * 提取当前所有骑手账单信息
+	 * @return
+	 * @throws BaseException
+	 */
+	public List<BeanQsbill> loadAllQSbill(BeanQs qs)throws BaseException;
 	/**
 	 * 登陆
 	 * 1、如果用户不存在或者密码错误，抛出一个异常

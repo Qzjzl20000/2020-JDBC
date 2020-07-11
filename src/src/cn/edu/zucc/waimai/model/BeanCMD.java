@@ -35,9 +35,10 @@ public class BeanCMD {
 		return CMD_pwd;
 	}
 
-	public void setCMD_pwd(String CMD_pwd) {
-		this.CMD_pwd = CMD_pwd;
+	public void setCMD_pwd(String cMD_pwd) {
+		CMD_pwd = cMD_pwd;
 	}
+
 	
 	
 }
