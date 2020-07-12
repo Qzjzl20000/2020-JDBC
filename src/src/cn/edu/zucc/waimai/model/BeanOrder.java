@@ -1,7 +1,5 @@
 package src.cn.edu.zucc.waimai.model;
 
-import java.security.Timestamp;
-
 public class BeanOrder {
 	public static BeanOrder currentLoginUser;
 	public static final String[] OrdertableTitles={"订单id","订单状态","商id","用户id","骑手id","原始金额","结算金额",

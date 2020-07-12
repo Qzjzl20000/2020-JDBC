@@ -4,6 +4,7 @@ package src.cn.edu.zucc.waimai.itf;
 import java.util.List;
 
 import src.cn.edu.zucc.waimai.model.BeanCMD;
+import src.cn.edu.zucc.waimai.model.BeanOrder;
 import src.cn.edu.zucc.waimai.model.BeanQs;
 import src.cn.edu.zucc.waimai.model.BeanQsbill;
 import src.cn.edu.zucc.waimai.model.BeanSj;
@@ -16,6 +17,12 @@ import src.cn.edu.zucc.waimai.model.BeanUserAdd;
 import src.cn.edu.zucc.waimai.util.BaseException;
 
 public interface ICMD {
+	/**
+	 * 提取当前所有订单信息
+	 * @return
+	 * @throws BaseException
+	 */
+	public List<BeanOrder> loadAllOrder()throws BaseException;
 	/**
 	 * 修改骑手
 	 * 能修改姓名、等级
