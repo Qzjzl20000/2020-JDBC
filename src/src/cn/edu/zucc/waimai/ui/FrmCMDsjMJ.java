@@ -22,6 +22,7 @@ import src.cn.edu.zucc.waimai.WaiMaiUtil;
 import src.cn.edu.zucc.waimai.model.BeanCMD;
 import src.cn.edu.zucc.waimai.model.BeanSj;
 import src.cn.edu.zucc.waimai.model.BeanSjFL;
+import src.cn.edu.zucc.waimai.model.BeanSjMJ;
 import src.cn.edu.zucc.waimai.model.BeanSjYHQ;
 import src.cn.edu.zucc.waimai.model.BeanSp;
 import src.cn.edu.zucc.waimai.model.BeanUser;
@@ -33,7 +34,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JTable;
 
-public class FrmCMDsjYHQ extends JFrame{
+public class FrmCMDsjMJ extends JFrame{
 
 	private JPanel contentPane=new JPanel();
 	
@@ -78,25 +79,25 @@ public class FrmCMDsjYHQ extends JFrame{
 		dataTableSjJTable.repaint();
 	}
 
-	private Object tblSjFLTitles[]=BeanSjYHQ.SjYHQtableTitles;//商家分栏信息
+	private Object tblSjFLTitles[]=BeanSjMJ.SjMJtableTitles;//商家分栏信息
 	private Object SjFLtableData[][];
 	private DefaultTableModel tableSjFLModel=new DefaultTableModel();
 	private JTable dataTableSjFLJTable =new JTable(tableSjFLModel);
-	private BeanSjYHQ curSjFL=null;
-	List<BeanSjYHQ> allSjFLs=null;
+	private BeanSjMJ curSjFL=null;
+	List<BeanSjMJ> allSjFLs=null;
 	
 	private void reloadSjFLTable(int idx){
 		if(idx<0) return;
 		curSj=allSj.get(idx);
 		try {
-			allSjFLs=WaiMaiUtil.userSjManager.loadAllYHQ(curSj);
+			allSjFLs=WaiMaiUtil.userSjManager.loadAllMJ(curSj);
 		} catch (BaseException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		SjFLtableData =new Object[allSjFLs.size()][BeanSjYHQ.SjYHQtableTitles.length];
+		SjFLtableData =new Object[allSjFLs.size()][BeanSjMJ.SjMJtableTitles.length];
 		for(int i=0;i<allSjFLs.size();i++){
-			for(int j=0;j<BeanSjYHQ.SjYHQtableTitles.length;j++) 
+			for(int j=0;j<BeanSjMJ.SjMJtableTitles.length;j++)
 				SjFLtableData[i][j]=allSjFLs.get(i).getCell(j);
 		}
 		
@@ -108,13 +109,13 @@ public class FrmCMDsjYHQ extends JFrame{
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu menu_1 = new JMenu("返回");
 	private JMenuItem menuItem_7_1_1 = new JMenuItem("返回主界面");
-	private JMenu menu_2 = new JMenu("管理优惠券");
-	private JMenuItem mntmNewMenuItem_2_1_22 = new JMenuItem("查看优惠券（刷新）");
-	private JMenuItem mntmNewMenuItem_2_1 = new JMenuItem("新建商家优惠券");
-	private JMenuItem mntmNewMenuItem_2_1_1 = new JMenuItem("删除商家优惠券");
-	private JMenuItem mntmNewMenuItem_2_1_1_1 = new JMenuItem("修改商家优惠券");
+	private JMenu menu_2 = new JMenu("管理满减");
+	private JMenuItem mntmNewMenuItem_2_1_22 = new JMenuItem("查看满减（刷新）");
+	private JMenuItem mntmNewMenuItem_2_1 = new JMenuItem("新建商家满减");
+	private JMenuItem mntmNewMenuItem_2_1_1 = new JMenuItem("删除商家满减");
+	private JMenuItem mntmNewMenuItem_2_1_1_1 = new JMenuItem("修改商家满减");
 	
-	public FrmCMDsjYHQ() {
+	public FrmCMDsjMJ() {
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
 		this.setTitle("外卖管理系统-管理商家优惠券");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -137,37 +138,32 @@ public class FrmCMDsjYHQ extends JFrame{
 		menu_2.add(mntmNewMenuItem_2_1);
 		mntmNewMenuItem_2_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int i=FrmCMDsjYHQ.this.dataTableSjJTable.getSelectedRow();
-				if(i<0) {
-					JOptionPane.showMessageDialog(null, "未选择商家", "错误",JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-				FrmCMDaddSJYHQ dlg=new FrmCMDaddSJYHQ(allSj.get(i));
-				dlg.setVisible(true);
+//				FrmCMDaddSJ dlg=new FrmCMDaddSJ();
+//				dlg.setVisible(true);
 			}
 		});
 		menu_2.add(mntmNewMenuItem_2_1_1);
 		mntmNewMenuItem_2_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int i=FrmCMDsjYHQ.this.dataTableSjFLJTable.getSelectedRow();
+				int i=FrmCMDsjMJ.this.dataTableSjJTable.getSelectedRow();
 				if(i<0) {
-					JOptionPane.showMessageDialog(null, "未选择优惠券", "错误",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "未选择商家", "错误",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				FrmCMDdeleteSjYHQ dlg=new FrmCMDdeleteSjYHQ(allSjFLs.get(i));
-				dlg.setVisible(true);
+//				FrmCMDdeleteSJ dlg=new FrmCMDdeleteSJ(allSj.get(i));
+//				dlg.setVisible(true);
 			}
 		});
 		menu_2.add(mntmNewMenuItem_2_1_1_1);
 		mntmNewMenuItem_2_1_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int i=FrmCMDsjYHQ.this.dataTableSjFLJTable.getSelectedRow();
+				int i=FrmCMDsjMJ.this.dataTableSjJTable.getSelectedRow();
 				if(i<0) {
-					JOptionPane.showMessageDialog(null, "未选择优惠券", "错误",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "未选择商家", "错误",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				FrmCMDmodifyYHQ dlg=new FrmCMDmodifyYHQ(allSjFLs.get(i));
-				dlg.setVisible(true);
+//				FrmCMDmodifySJ dlg=new FrmCMDmodifySJ(allSj.get(i));
+//				dlg.setVisible(true);
 			}
 		});
 		
@@ -177,11 +173,11 @@ public class FrmCMDsjYHQ extends JFrame{
 	    this.dataTableSjJTable.addMouseListener(new MouseAdapter (){
 			@Override
 			public void mouseClicked(MouseEvent e) {//鼠标点击动作，列出右边的列表
-				int i=FrmCMDsjYHQ.this.dataTableSjJTable.getSelectedRow();
+				int i=FrmCMDsjMJ.this.dataTableSjJTable.getSelectedRow();
 				if(i<0) {
 					return;
 				}
-				FrmCMDsjYHQ.this.reloadSjFLTable(i);
+				FrmCMDsjMJ.this.reloadSjFLTable(i);
 			}
 	    });
 		this.getContentPane().add(new JScrollPane(this.dataTableSjFLJTable), BorderLayout.CENTER);

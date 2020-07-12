@@ -1,10 +1,13 @@
 package src.cn.edu.zucc.waimai.comtrol.example;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+
+import org.hibernate.query.criteria.internal.expression.function.CurrentTimestampFunction;
 
 import src.cn.edu.zucc.waimai.itf.ICMD;
 import src.cn.edu.zucc.waimai.model.BeanCMD;
@@ -12,6 +15,7 @@ import src.cn.edu.zucc.waimai.model.BeanQs;
 import src.cn.edu.zucc.waimai.model.BeanQsbill;
 import src.cn.edu.zucc.waimai.model.BeanSj;
 import src.cn.edu.zucc.waimai.model.BeanSjFL;
+import src.cn.edu.zucc.waimai.model.BeanSjYHQ;
 import src.cn.edu.zucc.waimai.model.BeanSp;
 import src.cn.edu.zucc.waimai.model.BeanUser;
 import src.cn.edu.zucc.waimai.model.BeanUserAdd;
@@ -21,6 +25,170 @@ import src.cn.edu.zucc.waimai.util.DBUtil;
 import src.cn.edu.zucc.waimai.util.DbException;
 
 public class CMDManager implements ICMD {
+	@Override
+	public void modifyYHQ(BeanSjYHQ sjyhq,String youhui_money,String jidan,String days) throws BaseException{
+		if(youhui_money.equals("")) {
+			throw new BusinessException("优惠金额不能为空！");
+		}
+		if(jidan.equals("")) {
+			throw new BusinessException("集单要求不能为空！");
+		}
+		if(days.equals("")) {
+			throw new BusinessException("增加天数不能为空！");
+		}
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from sj_youhuiquan where youhuiquan_id="+sjyhq.getYouhuiquan_id();//查找优惠券
+			java.sql.Statement st=conn.createStatement();
+			java.sql.ResultSet rs=st.executeQuery(sql);
+			if(rs.next()) {
+				rs.close();
+				st.close();
+				
+				Timestamp longend =new Timestamp(0);
+				sql="select ADDDATE(?,interval ? day)";
+				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+				pst.setTimestamp(1, sjyhq.getYouhuiquan_end_time());
+				pst.setInt(2,Integer.parseInt(days));
+				rs=pst.executeQuery();
+				while(rs.next())
+					longend=rs.getTimestamp(1);
+				pst.close();
+				rs.close();
+				
+				sql="update sj_youhuiquan set youhui_money=?,jidan_least_count=?,youhuiquan_end_time=? where youhuiquan_id= ? ";//更新操作
+				pst=conn.prepareStatement(sql);
+				pst.setFloat(1, Float.parseFloat(youhui_money));
+				pst.setInt(2, Integer.parseInt(jidan));
+				pst.setTimestamp(3, longend);
+				pst.setInt(4, sjyhq.getYouhuiquan_id());
+				pst.execute();
+				pst.close();
+			}else {
+				rs.close();
+				st.close();
+				throw new BusinessException("该商家分栏已经不存在该商品了");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.commit();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public void deleteYHQ(BeanSjYHQ sjyhq) throws BaseException{
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from sj_youhuiquan where youhuiquan_id="+sjyhq.getYouhuiquan_id();//检查是否存在商品
+			java.sql.Statement st=conn.createStatement();
+			java.sql.ResultSet rs=st.executeQuery(sql);
+			if(rs.next()) {
+				rs.close();
+				st.close();
+				sql="delete from sj_youhuiquan where youhuiquan_id=?";//删除操作
+				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+				pst.setInt(1, sjyhq.getYouhuiquan_id());
+				pst.execute();
+				pst.close();
+			}else {
+				rs.close();
+				st.close();
+				throw new BusinessException("已经不存在该优惠券");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.commit();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public void regYHQ(BeanSj sj,String youhui_money,String jidan,String days)throws BaseException{
+		if(youhui_money.equals("")) {
+			throw new BusinessException("优惠金额不能为空！");
+		}
+		if(jidan.equals("")) {
+			throw new BusinessException("集单要求不能为空！");
+		}
+		if(days.equals("")) {
+			throw new BusinessException("活动天数不能为空！");
+		}
+		java.sql.Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			Timestamp begin=new Timestamp(0);
+			Timestamp end=new Timestamp(0);
+			String sql="select ADDDATE(now(),interval 0 day)";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next())
+				begin=rs.getTimestamp(1);
+			pst.close();
+			rs.close();
+			
+			sql="select ADDDATE(now(),interval ? day)";
+			pst=conn.prepareStatement(sql);
+			pst.setInt(1,Integer.parseInt(days));
+			rs=pst.executeQuery();
+			while(rs.next())
+				end=rs.getTimestamp(1);
+			pst.close();
+			rs.close();
+			
+			sql="insert into sj_youhuiquan(sj_id,youhui_money,"
+					+ "jidan_least_count,youhuiquan_begin_time,youhuiquan_end_time) values(?,?,?,?,?)";
+			pst=conn.prepareStatement(sql);
+			pst.setInt(1, sj.getSj_id());
+			pst.setFloat(2, Float.parseFloat(youhui_money));
+			pst.setInt(3, Integer.parseInt(jidan));
+			pst.setTimestamp(4, begin);
+			pst.setTimestamp(5, end);
+			pst.execute();
+			pst.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn!=null)
+				try {
+					conn.close();
+				}catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
 	@Override
 	public void modifySP(BeanSp sp,String name,String price,String left) throws BaseException{
 		java.sql.Connection conn =null;

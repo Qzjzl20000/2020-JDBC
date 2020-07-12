@@ -15,7 +15,7 @@ public class BeanSjYHQ {
 	public String getCell(int col){
 		if(col==0) return ""+this.getYouhuiquan_id();
 		else if(col==1) return ""+this.getYouhui_money()+"元";
-		else if(col==2) return ""+this.getJidan_least_count();
+		else if(col==2) return ""+this.getJidan_least_count()+"单";
 		else if(col==3) return ""+this.getYouhuiquan_begin_time();
 		else if(col==4) return ""+this.getYouhuiquan_end_time();
 		else return "";

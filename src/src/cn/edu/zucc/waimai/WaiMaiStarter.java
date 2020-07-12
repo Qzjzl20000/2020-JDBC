@@ -1,8 +1,6 @@
 package src.cn.edu.zucc.waimai;
 
 
-import javax.swing.JOptionPane;
-
 import src.cn.edu.zucc.waimai.ui.FrmLogin;
 
 public class WaiMaiStarter {

@@ -8,12 +8,28 @@ import src.cn.edu.zucc.waimai.model.BeanQs;
 import src.cn.edu.zucc.waimai.model.BeanQsbill;
 import src.cn.edu.zucc.waimai.model.BeanSj;
 import src.cn.edu.zucc.waimai.model.BeanSjFL;
+import src.cn.edu.zucc.waimai.model.BeanSjYHQ;
 import src.cn.edu.zucc.waimai.model.BeanSp;
 import src.cn.edu.zucc.waimai.model.BeanUser;
 import src.cn.edu.zucc.waimai.model.BeanUserAdd;
 import src.cn.edu.zucc.waimai.util.BaseException;
 
 public interface ICMD {
+	/**
+	 * 修改商家优惠券
+	 * 能修改优惠金额、集单要求、增加天数
+	 */
+	public void modifyYHQ(BeanSjYHQ sjyhq,String youhui_money,String jidan,String days) throws BaseException;
+	/**
+	 * 删除商家优惠券
+	 * 
+	 */
+	public void deleteYHQ(BeanSjYHQ sjyhq) throws BaseException;
+	/**
+	 * 新增商家优惠券
+	 * 包含优惠金额，集单要求，活动天数
+	 */
+	public void regYHQ(BeanSj sj,String youhui_money,String jidan,String days)throws BaseException;
 	/**
 	 * 修改商品
 	 * 能修改商品名、商品价格、商品余量

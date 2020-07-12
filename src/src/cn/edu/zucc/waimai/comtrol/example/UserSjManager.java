@@ -146,7 +146,7 @@ public class UserSjManager implements IUserSj {
 				p.setYouhui_money(rs.getFloat(3));
 				p.setJidan_least_count(rs.getInt(4));
 				p.setYouhuiquan_begin_time(rs.getTimestamp(5));
-				p.setYouhuiquan_end_time(rs.getTimestamp(5));
+				p.setYouhuiquan_end_time(rs.getTimestamp(6));
 				result.add(p);
 			}
 			rs.close();
