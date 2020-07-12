@@ -28,7 +28,6 @@ public class FrmCMDaddSP extends JFrame {
 	private JTextField textField;
 	private JTextField textField_2;
 	private JTextField textField_3;
-	public BeanSjFL sjfl=null;
 	/**
 	 * Launch the application.
 	 */
@@ -49,6 +48,9 @@ public class FrmCMDaddSP extends JFrame {
 	 * Create the frame.
 	 */
 	public FrmCMDaddSP() {
+		
+	}
+	public FrmCMDaddSP(BeanSjFL sjfl) {
 		setTitle("新增商品");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 322, 201);

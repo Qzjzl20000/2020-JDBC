@@ -11,6 +11,8 @@ import src.cn.edu.zucc.waimai.model.BeanCMD;
 import src.cn.edu.zucc.waimai.model.BeanQs;
 import src.cn.edu.zucc.waimai.model.BeanQsbill;
 import src.cn.edu.zucc.waimai.model.BeanSj;
+import src.cn.edu.zucc.waimai.model.BeanSjFL;
+import src.cn.edu.zucc.waimai.model.BeanSp;
 import src.cn.edu.zucc.waimai.model.BeanUser;
 import src.cn.edu.zucc.waimai.model.BeanUserAdd;
 import src.cn.edu.zucc.waimai.util.BaseException;
@@ -19,6 +21,216 @@ import src.cn.edu.zucc.waimai.util.DBUtil;
 import src.cn.edu.zucc.waimai.util.DbException;
 
 public class CMDManager implements ICMD {
+	@Override
+	public void modifySP(BeanSp sp,String name,String price,String left) throws BaseException{
+		java.sql.Connection conn =null;
+		try {
+			int sp_id=sp.getSp_id();
+			conn=DBUtil.getConnection();
+			String sql="select * from sp_data where sp_id="+sp_id;//查找商品
+			java.sql.Statement st=conn.createStatement();
+			java.sql.ResultSet rs=st.executeQuery(sql);
+			if(rs.next()) {
+				rs.close();
+				st.close();
+				sql="update sp_data set sp_name=?,sp_price=?,sp_left_count=? where sp_id= ? ";//更新操作
+				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+				pst.setString(1, name);
+				pst.setFloat(2, Float.parseFloat(price));
+				pst.setInt(3, Integer.parseInt(left));
+				pst.setInt(4, sp_id);
+				pst.execute();
+				pst.close();
+			}else {
+				rs.close();
+				st.close();
+				throw new BusinessException("该商家分栏已经不存在该商品了");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.commit();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public void deleteSP(BeanSp sp) throws BaseException{
+		java.sql.Connection conn =null;
+		try {
+			int sp_id=sp.getSp_id();
+			int fl_id=sp.getFl_id();
+			conn=DBUtil.getConnection();
+			String sql="select * from sp_data where sp_id="+sp_id;//检查是否存在商品
+			java.sql.Statement st=conn.createStatement();
+			java.sql.ResultSet rs=st.executeQuery(sql);
+			if(rs.next()) {
+				rs.close();
+				st.close();
+				sql="delete from sp_data where sp_id=?";//删除操作
+				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+				pst.setInt(1, sp_id);
+				pst.execute();
+				pst.close();
+				sql="update sp_leibie set sp_count=sp_count-1 where leibie_id=?";//
+				pst=conn.prepareStatement(sql);
+				pst.setInt(1, fl_id);
+				pst.execute();
+				pst.close();
+				
+			}else {
+				rs.close();
+				st.close();
+				throw new BusinessException("已经不存在该商品");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.commit();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public void modifySjFL(BeanSjFL sjfl,String name) throws BaseException{
+		java.sql.Connection conn =null;
+		try {
+			int sjfl_id=sjfl.getLeibie_id();
+			conn=DBUtil.getConnection();
+			String sql="select * from sp_leibie where leibie_id="+sjfl_id;//查找商家类别
+			java.sql.Statement st=conn.createStatement();
+			java.sql.ResultSet rs=st.executeQuery(sql);
+			if(rs.next()) {
+				rs.close();
+				st.close();
+				sql="update sp_leibie set leibie_name=? where leibie_id= ? ";//更新操作
+				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+				pst.setString(1, name);
+				pst.setInt(2, sjfl_id);
+				pst.execute();
+				pst.close();
+			}else {
+				rs.close();
+				st.close();
+				throw new BusinessException("该商家已经不存在该分栏");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.commit();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public void deleteSjFL(BeanSjFL sjfl) throws BaseException{
+		java.sql.Connection conn =null;
+		try {
+			int sjfl_id=sjfl.getLeibie_id();
+			conn=DBUtil.getConnection();
+			String sql="select * from sp_data where sp_belong_leibie_id="+sjfl_id;//检查是否存在商品
+			java.sql.Statement st=conn.createStatement();
+			java.sql.ResultSet rs=st.executeQuery(sql);
+			while(rs.next()) {
+				rs.close();
+				st.close();
+				throw new BusinessException("该商家分栏中仍存在商品，不能直接删除");
+			}
+			rs.close();
+			
+			sql="select * from sp_leibie where leibie_id="+sjfl_id;//查找商家分栏
+			rs=st.executeQuery(sql);
+			if(rs.next()&&sjfl.getLeibie_sp_count()==0) {
+				rs.close();
+				st.close();
+				sql="delete from sp_leibie where leibie_id=?";//删除操作
+				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+				pst.setInt(1, sjfl_id);
+				pst.execute();
+				pst.close();
+				
+			}else {
+				if(sjfl.getLeibie_sp_count()!=0) {
+					rs.close();
+					st.close();
+					throw new BusinessException("该商家分栏中商品数不为0，请检查");
+				}else {
+					rs.close();
+					st.close();
+					throw new BusinessException("已经不存在该商家");
+				}
+				
+			}
+			
+//			conn.commit();//结束事务
+		} 
+//		catch (BaseException e) {
+//			try {
+//				conn.rollback();
+//			} catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.commit();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
 	@Override
 	public void modifySj(BeanSj sj,String name,String xinji) throws BaseException{
 		java.sql.Connection conn =null;

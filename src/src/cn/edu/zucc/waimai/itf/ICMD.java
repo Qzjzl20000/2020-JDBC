@@ -7,11 +7,33 @@ import src.cn.edu.zucc.waimai.model.BeanCMD;
 import src.cn.edu.zucc.waimai.model.BeanQs;
 import src.cn.edu.zucc.waimai.model.BeanQsbill;
 import src.cn.edu.zucc.waimai.model.BeanSj;
+import src.cn.edu.zucc.waimai.model.BeanSjFL;
+import src.cn.edu.zucc.waimai.model.BeanSp;
 import src.cn.edu.zucc.waimai.model.BeanUser;
 import src.cn.edu.zucc.waimai.model.BeanUserAdd;
 import src.cn.edu.zucc.waimai.util.BaseException;
 
 public interface ICMD {
+	/**
+	 * 修改商品
+	 * 能修改商品名、商品价格、商品余量
+	 */
+	public void modifySP(BeanSp sp,String name,String price,String left) throws BaseException;
+	/**
+	 * 删除商品
+	 * 
+	 */
+	public void deleteSP(BeanSp sp) throws BaseException;
+	/**
+	 * 修改商家
+	 * 仅能修改分栏名
+	 */
+	public void modifySjFL(BeanSjFL sjfl,String name) throws BaseException;
+	/**
+	 * 删除商家分栏
+	 * 需要分栏内无商品
+	 */
+	public void deleteSjFL(BeanSjFL sjfl) throws BaseException;
 	/**
 	 * 修改商家
 	 * 仅能修改商家名和星级

@@ -6,15 +6,166 @@ import java.util.List;
 
 import src.cn.edu.zucc.waimai.model.BeanSp;
 import src.cn.edu.zucc.waimai.model.BeanUser;
+import src.cn.edu.zucc.waimai.model.BeanUserJD;
+import src.cn.edu.zucc.waimai.model.BeanUserYHQ;
 import src.cn.edu.zucc.waimai.itf.IUserSj;
 import src.cn.edu.zucc.waimai.model.BeanSj;
 import src.cn.edu.zucc.waimai.model.BeanSjFL;
+import src.cn.edu.zucc.waimai.model.BeanSjMJ;
+import src.cn.edu.zucc.waimai.model.BeanSjYHQ;
 import src.cn.edu.zucc.waimai.util.BaseException;
 import src.cn.edu.zucc.waimai.util.BusinessException;
 import src.cn.edu.zucc.waimai.util.DBUtil;
 import src.cn.edu.zucc.waimai.util.DbException;
 
 public class UserSjManager implements IUserSj {
+	@Override
+	public List<BeanUserJD> loadMJ(BeanUser user)throws BaseException{
+		List<BeanUserJD> result=new ArrayList<BeanUserJD>();
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from user_youhuiquan_jding where user_id=?";
+			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
+			pst.setInt(1, user.getUser_id());
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next()) {
+				BeanUserJD p=new BeanUserJD();
+				p.setUser_id(rs.getInt(1));
+				p.setYouhuiquan_id(rs.getInt(2));
+				p.setSj_id(rs.getInt(3));
+				p.setJidan_least_count(rs.getInt(4));
+				p.setOrder_count(rs.getInt(5));
+				result.add(p);
+			}
+			rs.close();
+			pst.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
+	@Override
+	public List<BeanUserYHQ> loadYHQ(BeanUser user)throws BaseException{
+		List<BeanUserYHQ> result=new ArrayList<BeanUserYHQ>();
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from user_youhuiquan_get where user_id=?";
+			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
+			pst.setInt(1, user.getUser_id());
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next()) {
+				BeanUserYHQ p=new BeanUserYHQ();
+				p.setUser_id(rs.getInt(1));
+				p.setYouhuiquan_id(rs.getInt(2));
+				p.setSj_id(rs.getInt(3));
+				p.setYouhui_money(rs.getFloat(4));
+				p.setYouhuiquan_count(rs.getInt(5));
+				p.setYouhuiquan_end_time(rs.getTimestamp(6));
+				result.add(p);
+			}
+			rs.close();
+			pst.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public List<BeanSjMJ> loadAllMJ(BeanSj sj)throws BaseException{
+		List<BeanSjMJ> result=new ArrayList<BeanSjMJ>();
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from sj_manjian where sj_id=?";
+			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
+			pst.setInt(1, sj.getSj_id());
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next()) {
+				BeanSjMJ p=new BeanSjMJ();
+				p.setSj_id(rs.getInt(1));
+				p.setMj_id(rs.getInt(2));
+				p.setMj_top_money(rs.getFloat(3));
+				p.setMj_discount_money(rs.getFloat(4));
+				p.setIf_add_youhuiquan(rs.getInt(5));
+				result.add(p);
+			}
+			rs.close();
+			pst.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public List<BeanSjYHQ> loadAllYHQ(BeanSj sj)throws BaseException{
+		List<BeanSjYHQ> result=new ArrayList<BeanSjYHQ>();
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from sj_youhuiquan where sj_id=?";
+			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
+			pst.setInt(1, sj.getSj_id());
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next()) {
+				BeanSjYHQ p=new BeanSjYHQ();
+				p.setSj_id(rs.getInt(1));
+				p.setYouhuiquan_id(rs.getInt(2));
+				p.setYouhui_money(rs.getFloat(3));
+				p.setJidan_least_count(rs.getInt(4));
+				p.setYouhuiquan_begin_time(rs.getTimestamp(5));
+				p.setYouhuiquan_end_time(rs.getTimestamp(5));
+				result.add(p);
+			}
+			rs.close();
+			pst.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	@Override
 	public BeanSp addSP(BeanSjFL sjfl ,String spname,String price,String left) throws BaseException{
 		if(spname.equals("")) {

@@ -3,11 +3,39 @@ package src.cn.edu.zucc.waimai.itf;
 import java.util.List;
 import src.cn.edu.zucc.waimai.model.BeanSj;
 import src.cn.edu.zucc.waimai.model.BeanSjFL;
+import src.cn.edu.zucc.waimai.model.BeanSjMJ;
+import src.cn.edu.zucc.waimai.model.BeanSjYHQ;
 import src.cn.edu.zucc.waimai.model.BeanSp;
 import src.cn.edu.zucc.waimai.model.BeanUser;
+import src.cn.edu.zucc.waimai.model.BeanUserJD;
+import src.cn.edu.zucc.waimai.model.BeanUserYHQ;
 import src.cn.edu.zucc.waimai.util.BaseException;
 
 public interface IUserSj {
+	/**
+	 * 提取当前用户所有商家满减信息
+	 * @return
+	 * @throws BaseException
+	 */
+	public List<BeanUserJD> loadMJ(BeanUser user)throws BaseException;
+	/**
+	 * 提取当前用户所有商家优惠券信息
+	 * @return
+	 * @throws BaseException
+	 */
+	public List<BeanUserYHQ> loadYHQ(BeanUser user)throws BaseException;
+	/**
+	 * 提取当前所有商家满减信息
+	 * @return
+	 * @throws BaseException
+	 */
+	public List<BeanSjMJ> loadAllMJ(BeanSj sj)throws BaseException;
+	/**
+	 * 提取当前所有商家优惠券信息
+	 * @return
+	 * @throws BaseException
+	 */
+	public List<BeanSjYHQ> loadAllYHQ(BeanSj sj)throws BaseException;
 	/**
 	 * 新建商品：
 	 * 要求商品名不能重复，不能为空

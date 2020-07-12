@@ -184,14 +184,24 @@ public class FrmCMDsj extends JFrame{
 		menu_2.add(mntmNewMenuItem_2_1_1);
 		mntmNewMenuItem_2_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FrmCMDdeleteSJ dlg=new FrmCMDdeleteSJ(curSj);
+				int i=FrmCMDsj.this.dataTableSjJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择商家", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				FrmCMDdeleteSJ dlg=new FrmCMDdeleteSJ(allSj.get(i));
 				dlg.setVisible(true);
 			}
 		});
 		menu_2.add(mntmNewMenuItem_2_1_1_1);
 		mntmNewMenuItem_2_1_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FrmCMDmodifySJ dlg=new FrmCMDmodifySJ(curSj);
+				int i=FrmCMDsj.this.dataTableSjJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择商家", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				FrmCMDmodifySJ dlg=new FrmCMDmodifySJ(allSj.get(i));
 				dlg.setVisible(true);
 			}
 		});
@@ -199,21 +209,37 @@ public class FrmCMDsj extends JFrame{
 		menu_5.add(mntmNewMenuItem_3_1);
 		mntmNewMenuItem_3_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FrmCMDaddSJFL flg=new FrmCMDaddSJFL();
-				flg.sj=curSj;
+				int i=FrmCMDsj.this.dataTableSjJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择商家", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				FrmCMDaddSJFL flg=new FrmCMDaddSJFL(allSj.get(i));
 				flg.setVisible(true);
 			}
 		});
 		menu_5.add(mntmNewMenuItem_3_2);
 		mntmNewMenuItem_3_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				int i=FrmCMDsj.this.dataTableSjFLJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择分栏", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				FrmCMDdeleteSJFL flg=new FrmCMDdeleteSJFL(allSjFLs.get(i));
+				flg.setVisible(true);
 			}
 		});
 		menu_5.add(mntmNewMenuItem_3_3);
 		mntmNewMenuItem_3_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				int i=FrmCMDsj.this.dataTableSjFLJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择分栏", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				FrmCMDmodifySJFL flg=new FrmCMDmodifySJFL(allSjFLs.get(i));
+				flg.setVisible(true);
 			}
 		});
 		
@@ -221,21 +247,38 @@ public class FrmCMDsj extends JFrame{
 		menu_6.add(mntmNewMenuItem_4_1);
 		mntmNewMenuItem_4_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FrmCMDaddSP flg=new FrmCMDaddSP();
-				flg.sjfl=curSjFL;
+				int i=FrmCMDsj.this.dataTableSjFLJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择分栏", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				FrmCMDaddSP flg=new FrmCMDaddSP(allSjFLs.get(i));
 				flg.setVisible(true);
 			}
 		});
 		menu_6.add(mntmNewMenuItem_4_2);
 		mntmNewMenuItem_4_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				int i=FrmCMDsj.this.dataTableSpJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择商品", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				FrmCMDdeleteSP flg=new FrmCMDdeleteSP(allSp.get(i));
+				flg.setVisible(true);
 			}
 		});
 		menu_6.add(mntmNewMenuItem_4_3);
 		mntmNewMenuItem_4_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				int i=FrmCMDsj.this.dataTableSpJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择商品", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				FrmCMDmodifySP flg=new FrmCMDmodifySP(allSp.get(i));
+				flg.setVisible(true);
+			
 			}
 		});
 		
@@ -243,13 +286,18 @@ public class FrmCMDsj extends JFrame{
 		menu_3.add(mntmNewMenuItem_1);
 		mntmNewMenuItem_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				FrmCMDsjYHQ flg=new FrmCMDsjYHQ();
+				flg.setVisible(true);
+				setVisible(false);
 			}
 		});
 		menuBar.add(menu_4);
 		menu_4.add(mntmNewMenuItem_1_1);
 		mntmNewMenuItem_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				FrmCMDsjMJ flg=new FrmCMDsjMJ();
+				flg.setVisible(true);
+				setVisible(false);
 			
 			}
 		});
