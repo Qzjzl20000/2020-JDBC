@@ -23,6 +23,130 @@ import src.cn.edu.zucc.waimai.util.DbException;
 
 public class CMDManager implements ICMD {
 	@Override
+	public void modifyQS(BeanQs qs,String name,String grade) throws BaseException{
+		if(name.equals("")) {
+			throw new BusinessException("骑手姓名不能为空！");
+		}
+		if(grade.equals("")) {
+			throw new BusinessException("骑手等级不能为空！");
+		}
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from qs_data where qs_id="+qs.getQs_id();//查找骑手
+			java.sql.Statement st=conn.createStatement();
+			java.sql.ResultSet rs=st.executeQuery(sql);
+			if(rs.next()) {
+				rs.close();
+				st.close();
+				
+				sql="update qs_data set qs_name=?,qs_grade=? where qs_id= ? ";//更新操作
+				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+				pst.setString(1, name);
+				pst.setString(2, grade);
+				pst.setInt(3, qs.getQs_id());
+				pst.execute();
+				pst.close();
+			}else {
+				rs.close();
+				st.close();
+				throw new BusinessException("该骑手已不存在");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.commit();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public void deleteQS(BeanQs qs) throws BaseException{
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from qs_data where qs_id="+qs.getQs_id();//检查是否存在商品
+			java.sql.Statement st=conn.createStatement();
+			java.sql.ResultSet rs=st.executeQuery(sql);
+			if(rs.next()) {
+				rs.close();
+				st.close();
+				sql="delete from qs_data where qs_id=?";//删除操作
+				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+				pst.setInt(1, qs.getQs_id());
+				pst.execute();
+				pst.close();
+			}else {
+				rs.close();
+				st.close();
+				throw new BusinessException("该骑手已经不存在");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.commit();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public void regQS(String name,String grade)throws BaseException{
+		if(name.equals("")) {
+			throw new BusinessException("骑手姓名不能为空！");
+		}
+		if(grade.equals("")) {
+			throw new BusinessException("骑手等级不能为空！");
+		}
+		java.sql.Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="insert into qs_data(qs_name,qs_join_date,"
+					+ "qs_grade) values(?,now(),?)";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst=conn.prepareStatement(sql);
+			pst.setString(1, name);
+			pst.setString(2, grade);
+			pst.execute();
+			pst.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn!=null)
+				try {
+					conn.close();
+				}catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
+	@Override
 	public void modifyMJ(BeanSjMJ sjmj,String top,String count,String ifmj) throws BaseException{
 		if(top.equals("")) {
 			throw new BusinessException("满减金额不能为空！");

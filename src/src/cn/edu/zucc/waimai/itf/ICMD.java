@@ -17,6 +17,21 @@ import src.cn.edu.zucc.waimai.util.BaseException;
 
 public interface ICMD {
 	/**
+	 * 修改骑手
+	 * 能修改姓名、等级
+	 */
+	public void modifyQS(BeanQs qs,String name,String grade) throws BaseException;
+	/**
+	 * 删除骑手
+	 * 需要骑手没有接过单
+	 */
+	public void deleteQS(BeanQs qs) throws BaseException;
+	/**
+	 * 新增骑手
+	 * 包含姓名，日期，等级
+	 */
+	public void regQS(String name,String grade)throws BaseException;
+	/**
 	 * 修改商家优惠券
 	 * 能修改优惠金额、集单要求、增加天数
 	 */

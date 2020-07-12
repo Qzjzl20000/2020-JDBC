@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import src.cn.edu.zucc.waimai.WaiMaiUtil;
+import src.cn.edu.zucc.waimai.model.BeanQs;
 import src.cn.edu.zucc.waimai.model.BeanSj;
 import src.cn.edu.zucc.waimai.model.BeanSjFL;
 import src.cn.edu.zucc.waimai.model.BeanSjYHQ;
@@ -23,12 +24,11 @@ import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.JTextField;
 
-public class FrmCMDmodifyYHQ extends JFrame {
+public class FrmCMDmodifyQS extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField_1;
 	private JTextField textField;
-	private JTextField textField_3;
 	/**
 	 * Launch the application.
 	 */
@@ -36,8 +36,7 @@ public class FrmCMDmodifyYHQ extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FrmCMDdeleteSJ frame = new FrmCMDdeleteSJ();
-					frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -48,17 +47,17 @@ public class FrmCMDmodifyYHQ extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FrmCMDmodifyYHQ() {
+	public FrmCMDmodifyQS() {
 		
 	}
-	public FrmCMDmodifyYHQ(BeanSjYHQ sjyhq) {
-		setBounds(100, 100, 296, 274);
+	public FrmCMDmodifyQS(BeanQs qs) {
+		setBounds(100, 100, 302, 242);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("您正在修改优惠金额"+sjyhq.getYouhui_money()+"元的优惠券");
+		JLabel lblNewLabel = new JLabel("您正在修改姓名是"+qs.getQs_name()+"的骑手");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setForeground(new Color(0, 0, 0));
 		lblNewLabel.setBounds(29, 18, 216, 33);
@@ -66,17 +65,16 @@ public class FrmCMDmodifyYHQ extends JFrame {
 		
 		
 		JButton btnNewButton = new JButton("确认修改");
-		btnNewButton.setBounds(166, 184, 112, 42);
+		btnNewButton.setBounds(167, 152, 112, 42);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource()==btnNewButton) {
-					String youhui_money=new String(textField_1.getText());
-					String jidan=new String(textField.getText());
-					String days=new String(textField_3.getText());
+					String name=new String(textField_1.getText());
+					String grade=new String(textField.getText());
 					try {
-						WaiMaiUtil.CMDManager.modifyYHQ(sjyhq, youhui_money, jidan, days);;
+						WaiMaiUtil.CMDManager.modifyQS(qs, name, grade);
 						setVisible(false);
-						JOptionPane.showMessageDialog(null, "修改商家优惠券成功", "系统提示",JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "修改骑手成功", "系统提示",JOptionPane.INFORMATION_MESSAGE);
 					} catch (BaseException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
 						return;
@@ -87,7 +85,7 @@ public class FrmCMDmodifyYHQ extends JFrame {
 		contentPane.add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("放弃操作");
-		btnNewButton_1.setBounds(51, 184, 112, 42);
+		btnNewButton_1.setBounds(52, 152, 112, 42);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
@@ -95,35 +93,25 @@ public class FrmCMDmodifyYHQ extends JFrame {
 		});
 		contentPane.add(btnNewButton_1);
 		
-		JLabel lblNewLabel_1 = new JLabel("修改优惠金额");
+		JLabel lblNewLabel_1 = new JLabel("修改骑手姓名");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_1.setBounds(29, 68, 87, 21);
+		lblNewLabel_1.setBounds(37, 66, 87, 21);
 		contentPane.add(lblNewLabel_1);
 		
 		textField_1 = new JTextField();
 		textField_1.setColumns(10);
-		textField_1.setBounds(128, 65, 130, 26);
+		textField_1.setBounds(136, 63, 130, 26);
 		contentPane.add(textField_1);
 		
-		JLabel lblNewLabel_1_1 = new JLabel("修改集单要求");
+		JLabel lblNewLabel_1_1 = new JLabel("修改骑手等级");
 		lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_1_1.setBounds(21, 104, 95, 21);
+		lblNewLabel_1_1.setBounds(29, 102, 95, 21);
 		contentPane.add(lblNewLabel_1_1);
 		
 		textField = new JTextField();
 		textField.setColumns(10);
-		textField.setBounds(128, 101, 130, 26);
+		textField.setBounds(136, 99, 130, 26);
 		contentPane.add(textField);
-		
-		JLabel lblNewLabel_1_1_1 = new JLabel("延长日期（天）");
-		lblNewLabel_1_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_1_1_1.setBounds(21, 140, 95, 21);
-		contentPane.add(lblNewLabel_1_1_1);
-		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(128, 137, 130, 26);
-		contentPane.add(textField_3);
 	}
 
 }

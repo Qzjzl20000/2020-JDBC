@@ -41,7 +41,7 @@ public class FrmLogin extends JFrame {
 		setTitle("登陆系统");
 		setBackground(Color.GRAY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 310);
+		setBounds(100, 100, 451, 330);
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -49,7 +49,7 @@ public class FrmLogin extends JFrame {
 		contentPane.setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(6, 0, 437, 284);
+		panel.setBounds(6, 0, 437, 301);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
@@ -99,7 +99,7 @@ public class FrmLogin extends JFrame {
 				setVisible(false);
 			}
 		});
-		button_2.setBounds(165, 216, 117, 29);
+		button_2.setBounds(165, 209, 117, 36);
 		panel.add(button_2);
 		
 		JButton button_2_1 = new JButton("管理员登陆");
@@ -119,7 +119,7 @@ public class FrmLogin extends JFrame {
 				setVisible(false);
 			}
 		});
-		button_2_1.setBounds(165, 241, 117, 29);
+		button_2_1.setBounds(165, 249, 117, 36);
 		panel.add(button_2_1);
 		
 		JButton button_3 = new JButton("用户注册");

@@ -36,7 +36,7 @@ public class FrmCMDchoice extends JFrame {
 	 */
 	public FrmCMDchoice() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 294, 336);
+		setBounds(500, 300, 294, 336);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -46,7 +46,7 @@ public class FrmCMDchoice extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Frmqs dlg=new Frmqs();
+					FrmQS dlg=new FrmQS();
 					dlg.setVisible(true);
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);

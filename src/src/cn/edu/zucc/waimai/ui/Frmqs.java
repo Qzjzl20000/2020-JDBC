@@ -31,7 +31,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JTable;
 
-public class Frmqs extends JFrame{
+public class FrmQS extends JFrame{
 
 	private JPanel contentPane=new JPanel();
 	
@@ -115,7 +115,7 @@ public class Frmqs extends JFrame{
 
 	
 	
-	public Frmqs() {
+	public FrmQS() {
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
 		this.setTitle("外卖管理系统-骑手管理");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -141,12 +141,34 @@ public class Frmqs extends JFrame{
 		menu_5.add(menuItem_6);
 		menuItem_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				FrmCMDaddQS dlg=new FrmCMDaddQS();
+				dlg.setVisible(true);
 			}
 		});
-		menu_5.add(menuItem_9_1_1);
+		menu_5.add(menuItem_9_1_1);//修改
+		menuItem_9_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int i=FrmQS.this.dataTableSjJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择骑手", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				FrmCMDmodifyQS dlg=new FrmCMDmodifyQS(allSj.get(i));
+				dlg.setVisible(true);
+			}
+		});
 		menu_5.add(menuItem_8);
-		
+		menuItem_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int i=FrmQS.this.dataTableSjJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择骑手", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				FrmCMDdeleteQS dlg=new FrmCMDdeleteQS(allSj.get(i));
+				dlg.setVisible(true);
+			}
+		});
 		
 
 		this.getContentPane().add(new JScrollPane(this.dataTableSjJTable), BorderLayout.WEST);
@@ -154,11 +176,11 @@ public class Frmqs extends JFrame{
 	    this.dataTableSjJTable.addMouseListener(new MouseAdapter (){
 			@Override
 			public void mouseClicked(MouseEvent e) {//鼠标点击动作，列出右边的列表
-				int i=Frmqs.this.dataTableSjJTable.getSelectedRow();
+				int i=FrmQS.this.dataTableSjJTable.getSelectedRow();
 				if(i<0) {
 					return;
 				}
-				Frmqs.this.reloadQsbillTable(i);
+				FrmQS.this.reloadQsbillTable(i);
 			}
 	    });
 		this.getContentPane().add(new JScrollPane(this.dataTableSjFLJTable), BorderLayout.CENTER);
