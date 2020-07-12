@@ -5,16 +5,13 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
-import org.hibernate.query.criteria.internal.expression.function.CurrentTimestampFunction;
-
 import src.cn.edu.zucc.waimai.itf.ICMD;
 import src.cn.edu.zucc.waimai.model.BeanCMD;
 import src.cn.edu.zucc.waimai.model.BeanQs;
 import src.cn.edu.zucc.waimai.model.BeanQsbill;
 import src.cn.edu.zucc.waimai.model.BeanSj;
 import src.cn.edu.zucc.waimai.model.BeanSjFL;
+import src.cn.edu.zucc.waimai.model.BeanSjMJ;
 import src.cn.edu.zucc.waimai.model.BeanSjYHQ;
 import src.cn.edu.zucc.waimai.model.BeanSp;
 import src.cn.edu.zucc.waimai.model.BeanUser;
@@ -25,6 +22,140 @@ import src.cn.edu.zucc.waimai.util.DBUtil;
 import src.cn.edu.zucc.waimai.util.DbException;
 
 public class CMDManager implements ICMD {
+	@Override
+	public void modifyMJ(BeanSjMJ sjmj,String top,String count,String ifmj) throws BaseException{
+		if(top.equals("")) {
+			throw new BusinessException("满减金额不能为空！");
+		}
+		if(count.equals("")) {
+			throw new BusinessException("优惠金额不能为空！");
+		}
+		if(ifmj.equals("")) {
+			throw new BusinessException("是否与优惠券叠加不能为空！");
+		}
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from sj_manjian where mj_id="+sjmj.getMj_id();//查找满减
+			java.sql.Statement st=conn.createStatement();
+			java.sql.ResultSet rs=st.executeQuery(sql);
+			if(rs.next()) {
+				rs.close();
+				st.close();
+				
+				sql="update sj_manjian set mj_top_money=?,mj_discount_money=?,if_add_youhuiquan=? where mj_id= ? ";//更新操作
+				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+				pst.setFloat(1, Float.parseFloat(top));
+				pst.setFloat(2, Float.parseFloat(count));
+				pst.setInt(3,Integer.parseInt(ifmj));
+				pst.setInt(4,sjmj.getMj_id());
+				pst.execute();
+				pst.close();
+			}else {
+				rs.close();
+				st.close();
+				throw new BusinessException("该商家分栏已经不存在该商品了");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.commit();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public void deleteMJ(BeanSjMJ sjmj) throws BaseException{
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from sj_manjian where mj_id="+sjmj.getMj_id();//检查是否存在商品
+			java.sql.Statement st=conn.createStatement();
+			java.sql.ResultSet rs=st.executeQuery(sql);
+			if(rs.next()) {
+				rs.close();
+				st.close();
+				sql="delete from sj_manjian where mj_id=?";//删除操作
+				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+				pst.setInt(1, sjmj.getMj_id());
+				pst.execute();
+				pst.close();
+			}else {
+				rs.close();
+				st.close();
+				throw new BusinessException("已经不存在该满减政策");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.commit();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public void regMJ(BeanSj sj,String top,String count,String ifmj)throws BaseException{
+		if(top.equals("")) {
+			throw new BusinessException("满减金额不能为空！");
+		}
+		if(count.equals("")) {
+			throw new BusinessException("优惠金额不能为空！");
+		}
+		if(ifmj.equals("")) {
+			throw new BusinessException("是否与优惠券叠加不能为空！");
+		}
+		java.sql.Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="insert into sj_manjian(sj_id,mj_top_money,"
+					+ "mj_discount_money,if_add_youhuiquan) values(?,?,?,?)";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst=conn.prepareStatement(sql);
+			pst.setInt(1, sj.getSj_id());
+			pst.setFloat(2, Float.parseFloat(top));
+			pst.setFloat(3, Float.parseFloat(count));
+			pst.setInt(4, Integer.parseInt(ifmj));
+			pst.execute();
+			pst.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn!=null)
+				try {
+					conn.close();
+				}catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
 	@Override
 	public void modifyYHQ(BeanSjYHQ sjyhq,String youhui_money,String jidan,String days) throws BaseException{
 		if(youhui_money.equals("")) {

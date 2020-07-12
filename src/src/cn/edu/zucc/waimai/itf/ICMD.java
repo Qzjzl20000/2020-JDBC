@@ -8,6 +8,7 @@ import src.cn.edu.zucc.waimai.model.BeanQs;
 import src.cn.edu.zucc.waimai.model.BeanQsbill;
 import src.cn.edu.zucc.waimai.model.BeanSj;
 import src.cn.edu.zucc.waimai.model.BeanSjFL;
+import src.cn.edu.zucc.waimai.model.BeanSjMJ;
 import src.cn.edu.zucc.waimai.model.BeanSjYHQ;
 import src.cn.edu.zucc.waimai.model.BeanSp;
 import src.cn.edu.zucc.waimai.model.BeanUser;
@@ -15,6 +16,21 @@ import src.cn.edu.zucc.waimai.model.BeanUserAdd;
 import src.cn.edu.zucc.waimai.util.BaseException;
 
 public interface ICMD {
+	/**
+	 * 修改商家优惠券
+	 * 能修改优惠金额、集单要求、增加天数
+	 */
+	public void modifyMJ(BeanSjMJ sjmj,String top,String count,String ifmj) throws BaseException;
+	/**
+	 * 删除商家优惠券
+	 * 
+	 */
+	public void deleteMJ(BeanSjMJ sjmj) throws BaseException;
+	/**
+	 * 新增商家优惠券
+	 * 包含优惠金额，集单要求，活动天数
+	 */
+	public void regMJ(BeanSj sj,String top,String count,String ifmj)throws BaseException;
 	/**
 	 * 修改商家优惠券
 	 * 能修改优惠金额、集单要求、增加天数

@@ -21,11 +21,7 @@ import javax.swing.table.DefaultTableModel;
 import src.cn.edu.zucc.waimai.WaiMaiUtil;
 import src.cn.edu.zucc.waimai.model.BeanCMD;
 import src.cn.edu.zucc.waimai.model.BeanSj;
-import src.cn.edu.zucc.waimai.model.BeanSjFL;
 import src.cn.edu.zucc.waimai.model.BeanSjMJ;
-import src.cn.edu.zucc.waimai.model.BeanSjYHQ;
-import src.cn.edu.zucc.waimai.model.BeanSp;
-import src.cn.edu.zucc.waimai.model.BeanUser;
 import src.cn.edu.zucc.waimai.util.BaseException;
 
 import javax.swing.JMenuBar;
@@ -138,32 +134,37 @@ public class FrmCMDsjMJ extends JFrame{
 		menu_2.add(mntmNewMenuItem_2_1);
 		mntmNewMenuItem_2_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				FrmCMDaddSJ dlg=new FrmCMDaddSJ();
-//				dlg.setVisible(true);
+				int i=FrmCMDsjMJ.this.dataTableSjJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择商家", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				FrmCMDaddSJMJ dlg=new FrmCMDaddSJMJ(allSj.get(i));
+				dlg.setVisible(true);
 			}
 		});
 		menu_2.add(mntmNewMenuItem_2_1_1);
 		mntmNewMenuItem_2_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int i=FrmCMDsjMJ.this.dataTableSjJTable.getSelectedRow();
+				int i=FrmCMDsjMJ.this.dataTableSjFLJTable.getSelectedRow();
 				if(i<0) {
-					JOptionPane.showMessageDialog(null, "未选择商家", "错误",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "未选择满减项目", "错误",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-//				FrmCMDdeleteSJ dlg=new FrmCMDdeleteSJ(allSj.get(i));
-//				dlg.setVisible(true);
+				FrmCMDdeleteSjMJ dlg=new FrmCMDdeleteSjMJ(allSjFLs.get(i));
+				dlg.setVisible(true);
 			}
 		});
 		menu_2.add(mntmNewMenuItem_2_1_1_1);
 		mntmNewMenuItem_2_1_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int i=FrmCMDsjMJ.this.dataTableSjJTable.getSelectedRow();
+				int i=FrmCMDsjMJ.this.dataTableSjFLJTable.getSelectedRow();
 				if(i<0) {
-					JOptionPane.showMessageDialog(null, "未选择商家", "错误",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "未选择满减项目", "错误",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-//				FrmCMDmodifySJ dlg=new FrmCMDmodifySJ(allSj.get(i));
-//				dlg.setVisible(true);
+				FrmCMDmodifySjMJ dlg=new FrmCMDmodifySjMJ(allSjFLs.get(i));
+				dlg.setVisible(true);
 			}
 		});
 		
