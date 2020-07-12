@@ -105,7 +105,7 @@ public class FrmCMDsj extends JFrame{
 		this.dataTableSjFLJTable.repaint();
 	}
 
-	private Object tblSpTitles[]=BeanSp.SptableTitles;//商家分栏商品信息
+	private Object tblSpTitles[]=BeanSp.SptableTitles;//商品信息
 	private Object SptableData[][];
 	private DefaultTableModel tableSpModel=new DefaultTableModel();
 	private JTable dataTableSpJTable =new JTable(tableSpModel);
@@ -184,13 +184,15 @@ public class FrmCMDsj extends JFrame{
 		menu_2.add(mntmNewMenuItem_2_1_1);
 		mntmNewMenuItem_2_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				FrmCMDdeleteSJ dlg=new FrmCMDdeleteSJ(curSj);
+				dlg.setVisible(true);
 			}
 		});
 		menu_2.add(mntmNewMenuItem_2_1_1_1);
 		mntmNewMenuItem_2_1_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				FrmCMDmodifySJ dlg=new FrmCMDmodifySJ(curSj);
+				dlg.setVisible(true);
 			}
 		});
 		menuBar.add(menu_5);

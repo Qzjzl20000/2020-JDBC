@@ -59,6 +59,18 @@ public class FrmCMDchoice extends JFrame {
 		contentPane.add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("点击管理用户");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					FrmCMDallYH dlg=new FrmCMDallYH();
+					dlg.setVisible(true);
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				setVisible(false);
+			}
+		});
 		btnNewButton_1.setBounds(67, 133, 164, 51);
 		contentPane.add(btnNewButton_1);
 		

@@ -3,7 +3,7 @@ package src.cn.edu.zucc.waimai.util;
 import java.sql.Connection;
 
 public class DBUtil {
-	private static final String jdbcUrl="jdbc:mysql://localhost:3306/waimaiJZL";
+	private static final String jdbcUrl="jdbc:mysql://localhost:3306/waimaiJZL?characterEncoding=utf8";
 	private static final String dbUser="root";
 	private static final String dbPwd="1";
 	static{

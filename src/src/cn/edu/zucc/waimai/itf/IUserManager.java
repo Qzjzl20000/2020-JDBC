@@ -9,7 +9,7 @@ import src.cn.edu.zucc.waimai.util.BaseException;
 
 public interface IUserManager {
 	/**
-	 * 提取当前所有用户信息
+	 * 提取当前用户信息
 	 * @return
 	 * @throws BaseException
 	 */
@@ -27,7 +27,7 @@ public interface IUserManager {
 	 */
 	public List<BeanOrder> loadAllYHOrder()throws BaseException;
 	/**
-	 * 提取当前所有用户地址信息
+	 * 提取当前用户地址信息
 	 * @return
 	 * @throws BaseException
 	 */

@@ -13,6 +13,5 @@ public class WaiMaiStarter {
 	public static void main(String[] args) {
 		new FrmLogin();
 	}
-
 }
 //JOptionPane.showMessageDialog(null, "1", "系统提示",JOptionPane.INFORMATION_MESSAGE);

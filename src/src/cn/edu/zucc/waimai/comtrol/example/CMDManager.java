@@ -4,19 +4,282 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import src.cn.edu.zucc.waimai.itf.ICMD;
 import src.cn.edu.zucc.waimai.model.BeanCMD;
 import src.cn.edu.zucc.waimai.model.BeanQs;
 import src.cn.edu.zucc.waimai.model.BeanQsbill;
 import src.cn.edu.zucc.waimai.model.BeanSj;
-import src.cn.edu.zucc.waimai.model.BeanSjFL;
 import src.cn.edu.zucc.waimai.model.BeanUser;
+import src.cn.edu.zucc.waimai.model.BeanUserAdd;
 import src.cn.edu.zucc.waimai.util.BaseException;
 import src.cn.edu.zucc.waimai.util.BusinessException;
 import src.cn.edu.zucc.waimai.util.DBUtil;
 import src.cn.edu.zucc.waimai.util.DbException;
 
 public class CMDManager implements ICMD {
+	@Override
+	public void modifySj(BeanSj sj,String name,String xinji) throws BaseException{
+		java.sql.Connection conn =null;
+		try {
+			int sj_id=sj.getSj_id();
+			conn=DBUtil.getConnection();
+			String sql="select * from sj_data where sj_id="+sj_id;//查找商家
+			java.sql.Statement st=conn.createStatement();
+			java.sql.ResultSet rs=st.executeQuery(sql);
+			if(rs.next()) {
+				rs.close();
+				st.close();
+				sql="update sj_data set sj_name=?,sj_xinji=? where sj_id= ? ";//更新操作
+				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+				pst.setString(1, name);
+				pst.setInt(2, Integer.parseInt(xinji));
+				pst.setInt(3, sj_id);
+				pst.execute();
+				pst.close();
+			}else {
+				rs.close();
+				st.close();
+				throw new BusinessException("已经不存在该商家");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.commit();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public void deleteSj(BeanSj sj) throws BaseException {
+		java.sql.Connection conn =null;
+		try {
+			int sj_id=sj.getSj_id();
+			conn=DBUtil.getConnection();
+//			conn.setAutoCommit(false);//开启事务
+			String sql="select * from sp_leibie where sj_id="+sj_id;//检查是否存在分栏
+			java.sql.Statement st=conn.createStatement();
+			java.sql.ResultSet rs=st.executeQuery(sql);
+			while(rs.next()) {
+				rs.close();
+				st.close();
+				throw new BusinessException("该商家仍存在分栏，不能直接删除");
+			}
+			rs.close();
+			
+			sql="select * from sj_data where sj_id="+sj_id;//查找商家
+			rs=st.executeQuery(sql);
+			if(rs.next()) {
+				rs.close();
+				st.close();
+				sql="delete from sj_data where sj_id=?";//删除操作
+				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+				pst.setInt(1, sj_id);
+				pst.execute();
+				pst.close();
+				
+			}else {
+				rs.close();
+				st.close();
+				throw new BusinessException("已经不存在该商家");
+			}
+			
+//			conn.commit();//结束事务
+		} 
+//		catch (BaseException e) {
+//			try {
+//				conn.rollback();
+//			} catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.commit();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+		}
+		
+
+	}
+
+	@Override
+	public List<BeanUserAdd> loadAllYHadd(BeanUser user)throws BaseException{
+		List<BeanUserAdd> result=new ArrayList<BeanUserAdd>();
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select user_id,user_province,user_city,user_area,user_address_detail,user_ad_name,user_ad_phonenum"
+					+ " from user_address where user_id=? order by user_address_id";
+			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
+			pst.setInt(1, user.getUser_id());
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next()) {
+				BeanUserAdd p=new BeanUserAdd();
+				p.setUser_id(rs.getInt(1));
+				p.setUser_province(rs.getString(2));
+				p.setUser_city(rs.getString(3));
+				p.setUser_area(rs.getString(4));
+				p.setUser_add_detail(rs.getString(5));
+				p.setUser_add_name(rs.getString(6));
+				p.setUser_add_phonenum(rs.getString(7));
+				result.add(p);
+			}
+			rs.close();
+			pst.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public BeanUser reg(String username,int usersex, String pwd,String pwd2,String userphonenum,
+			String usere_mail,String usercity) throws BaseException{
+		if(username.equals("")) {
+			throw new BusinessException("用户名不能为空！");
+		}
+		if(usersex!=0 && usersex!=1) {
+			throw new BusinessException("性别请输入0（女性）或1（男性）！");
+		}
+		if(pwd.equals("")) {
+			throw new BusinessException("密码不能为空！");
+		}
+		if(pwd2.equals("")) {
+			throw new BusinessException("请第二次输入密码！");
+		}
+		if(!(pwd.equals(pwd2))) {
+			throw new BusinessException("两次密码不一致！");
+		}
+		if(userphonenum.equals("")) {
+			throw new BusinessException("手机号码不能为空！");
+		}
+		if(usere_mail.equals("")) {
+			throw new BusinessException("邮箱不能为空！");
+		}
+		if(usercity.equals("")) {
+			throw new BusinessException("所在城市不能为空！");
+		}
+		java.sql.Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from user_data where user_name=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setString(1,username);
+			java.sql.ResultSet rs=pst.executeQuery();
+			if(rs.next())throw new BusinessException("姓名已存在！");
+			rs.close();
+			pst.close();
+			sql="insert into user_data(user_name,user_sex,user_pwd,user_phonenum,"
+					+ "user_email,user_city,user_register_time) values(?,?,?,?,?,?,?)";
+			pst=conn.prepareStatement(sql);
+			pst.setString(1, username);
+			pst.setInt(2, usersex);
+			pst.setString(3, pwd);
+			pst.setString(4, userphonenum);
+			pst.setString(5, usere_mail);
+			pst.setString(6, usercity);
+			pst.setTimestamp(7, new java.sql.Timestamp(System.currentTimeMillis()));
+			pst.execute();
+			pst.close();
+			BeanUser bu=new BeanUser();
+			bu.setUser_name(username);
+			bu.setUser_sex(usersex);
+			bu.setUser_pwd(pwd);
+			bu.setUser_phonenum(userphonenum);
+			bu.setUser_email(usere_mail);
+			bu.setUser_city(usercity);
+			bu.setUser_register_time(new java.sql.Timestamp(System.currentTimeMillis()));
+			bu.setUser_vip_end_time(null);
+			return bu;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn!=null)
+				try {
+					conn.close();
+				}catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
+	@Override
+	public List<BeanUser> loadAllYH()throws BaseException{
+		List<BeanUser> result=new ArrayList<BeanUser>();
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select user_id,user_name,user_sex,user_pwd,user_phonenum,user_email,user_city,user_register_time,user_vip_end_time"
+					+ " from user_data";
+			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
+			
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next()) {
+				BeanUser p=new BeanUser();
+				p.setUser_id(rs.getInt(1));
+				p.setUser_name(rs.getString(2));
+				p.setUser_sex(rs.getInt(3));
+				p.setUser_pwd(rs.getString(4));
+				p.setUser_phonenum(rs.getString(5));
+				p.setUser_email(rs.getString(6));
+				p.setUser_city(rs.getString(7));
+				p.setUser_register_time(rs.getTimestamp(8));
+				p.setUser_vip_end_time(rs.getTimestamp(9));
+				result.add(p);
+			}
+			rs.close();
+			pst.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	@Override
 	public List<BeanQs> loadAllQS()throws BaseException{
 		List<BeanQs> result=new ArrayList<BeanQs>();
