@@ -1,6 +1,8 @@
 package src.cn.edu.zucc.waimai;
 
 
+import javax.swing.JOptionPane;
+
 import src.cn.edu.zucc.waimai.ui.FrmLogin;
 
 public class WaiMaiStarter {
@@ -13,3 +15,4 @@ public class WaiMaiStarter {
 	}
 
 }
+//JOptionPane.showMessageDialog(null, "1", "系统提示",JOptionPane.INFORMATION_MESSAGE);

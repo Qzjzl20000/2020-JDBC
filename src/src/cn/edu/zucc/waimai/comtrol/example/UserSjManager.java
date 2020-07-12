@@ -5,15 +5,165 @@ import java.util.ArrayList;
 import java.util.List;
 
 import src.cn.edu.zucc.waimai.model.BeanSp;
+import src.cn.edu.zucc.waimai.model.BeanUser;
 import src.cn.edu.zucc.waimai.itf.IUserSj;
 import src.cn.edu.zucc.waimai.model.BeanSj;
 import src.cn.edu.zucc.waimai.model.BeanSjFL;
 import src.cn.edu.zucc.waimai.util.BaseException;
+import src.cn.edu.zucc.waimai.util.BusinessException;
 import src.cn.edu.zucc.waimai.util.DBUtil;
 import src.cn.edu.zucc.waimai.util.DbException;
 
 public class UserSjManager implements IUserSj {
-
+	@Override
+	public BeanSp addSP(BeanSjFL sjfl ,String spname,String price,String left) throws BaseException{
+		if(spname.equals("")) {
+			throw new BusinessException("商品名不能为空！");
+		}
+		if(price.equals("")) {
+			throw new BusinessException("价格不能为空！");
+		}
+		if(left.equals("")) {
+			throw new BusinessException("余量不能为空！");
+		}
+		java.sql.Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select sp_name from sp_data where sj_id=? and sp_belong_leibie_id=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1,sjfl.getSj_id());
+			pst.setInt(2, sjfl.getLeibie_id());
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next()) {
+				if(rs.getString(1).equals(spname)) {
+					rs.close();
+					pst.close();
+					throw new BusinessException("该商家该分栏已存在此商品名！");
+				}
+			}
+			rs.close();
+			pst.close();
+			sql="insert into sp_data(sj_id,sp_belong_leibie_id,sp_name,sp_price,sp_left_count) values(?,?,?,?,?)";
+			pst=conn.prepareStatement(sql);
+			pst.setInt(1, sjfl.getSj_id());
+			pst.setInt(2, sjfl.getLeibie_id());
+			pst.setString(3, spname);
+			pst.setFloat(4, Float.parseFloat(price));
+			pst.setInt(5,Integer.parseInt(left));
+			pst.execute();
+			pst.close();
+			sql="update sp_leibie set sp_count=sp_count+1 where leibie_id=?";
+			pst=conn.prepareStatement(sql);
+			pst.setInt(1, sjfl.getLeibie_id());
+			pst.execute();
+			pst.close();
+			BeanSp bu=new BeanSp();
+			bu.setFl_id(sjfl.getLeibie_id());
+			bu.setSj_id(sjfl.getSj_id());
+			bu.setSp_left_count(Integer.parseInt(left));
+			bu.setSp_name(spname);
+			bu.setSp_price(Float.parseFloat(price));
+			return bu;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn!=null)
+				try {
+					conn.close();
+				}catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
+	@Override
+	public BeanSjFL addSJFL(BeanSj sj ,String flname) throws BaseException{
+		if(flname.equals("")) {
+			throw new BusinessException("分栏名不能为空！");
+		}
+		java.sql.Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select leibie_name from sp_leibie where sj_id=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1,sj.getSj_id());
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next()) {
+				if(rs.getString(1).equals(flname)) {
+					rs.close();
+					pst.close();
+					throw new BusinessException("分栏名已存在！");
+				}
+			}
+			rs.close();
+			pst.close();
+			sql="insert into sp_leibie(sj_id,leibie_name,sp_count) values(?,?,0)";
+			pst=conn.prepareStatement(sql);
+			pst.setInt(1, sj.getSj_id());
+			pst.setString(2, flname);
+			pst.execute();
+			pst.close();
+			BeanSjFL bu=new BeanSjFL();
+			bu.setLeibie_name(flname);
+			bu.setLeibie_sp_count(0);
+			bu.setSj_id(sj.getSj_id());
+			return bu;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn!=null)
+				try {
+					conn.close();
+				}catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
+	@Override
+	public BeanSj reg(String sjname,String xinji) throws BaseException{
+		if(sjname.equals("")) {
+			throw new BusinessException("用户名不能为空！");
+		}
+		if(xinji.equals("")) {
+			throw new BusinessException("星级不能为空！");
+		}
+	
+		java.sql.Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			int ixinji=Integer.parseInt(xinji);
+			String sql="select * from sj_data where sj_name=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setString(1,sjname);
+			java.sql.ResultSet rs=pst.executeQuery();
+			if(rs.next())throw new BusinessException("商家名已存在！");
+			rs.close();
+			pst.close();
+			sql="insert into sj_data(sj_name,sj_xinji) values(?,?)";
+			pst=conn.prepareStatement(sql);
+			pst.setString(1, sjname);
+			pst.setInt(2, ixinji);
+			pst.execute();
+			pst.close();
+			BeanSj bu=new BeanSj();
+			bu.setAvg_consume(0);
+			bu.setSj_name(sjname);
+			bu.setSj_xinji(ixinji);
+			bu.setTotal_consume(0);
+			return bu;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn!=null)
+				try {
+					conn.close();
+				}catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
 	@Override
 	public List<BeanSj> loadAll()throws BaseException{
 		List<BeanSj> result=new ArrayList<BeanSj>();
