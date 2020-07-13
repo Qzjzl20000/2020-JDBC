@@ -137,8 +137,24 @@ public class FrmCMDOrder extends JFrame{
 		menu_5.add(menuItem_6);//接单
 		menuItem_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				FrmCMDaddQS dlg=new FrmCMDaddQS();
-//				dlg.setVisible(true);
+				int i=FrmCMDOrder.this.dataTableSjJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择骑手", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				int j=FrmCMDOrder.this.dataTableSjFLJTable.getSelectedRow();
+				if(j<0) {
+					JOptionPane.showMessageDialog(null, "未选择订单", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				try {
+					WaiMaiUtil.CMDManager.QSJD(allSj.get(i),allSjFLs.get(j));
+					JOptionPane.showMessageDialog(null, "接单成功", "系统提示",JOptionPane.INFORMATION_MESSAGE);
+				} catch (BaseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 		menu_5.add(menuItem_9_1_1);//修改订单状态

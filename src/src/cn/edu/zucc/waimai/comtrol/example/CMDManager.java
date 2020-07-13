@@ -24,6 +24,51 @@ import src.cn.edu.zucc.waimai.util.DbException;
 
 public class CMDManager implements ICMD {
 	@Override
+	public void QSJD(BeanQs qs,BeanOrder order) throws BaseException{
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from order_data where order_id="+order.getOrder_id();//查找订单
+			java.sql.Statement st=conn.createStatement();
+			java.sql.ResultSet rs=st.executeQuery(sql);
+			if(rs.next()) {	
+				rs.close();
+				st.close();
+				sql="update order_data set qs_id=?,order_state=? where order_id=?";
+				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+				pst.setInt(1,qs.getQs_id());
+				pst.setString(2, "派送中");
+				pst.setInt(3, order.getOrder_id());
+				pst.execute();
+				pst.close();
+			}
+			else {
+				rs.close();
+				st.close();
+				throw new BusinessException("该订单不存在");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.commit();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
 	public void modifyOrder(BeanOrder order,String state) throws BaseException{
 		if(state.equals("")) {
 			throw new BusinessException("修改状态不能为空！");
