@@ -18,6 +18,11 @@ import src.cn.edu.zucc.waimai.util.BaseException;
 
 public interface ICMD {
 	/**
+	 * 修改订单状态
+	 * 能修改姓名、等级
+	 */
+	public void modifyOrder(BeanOrder order,String state) throws BaseException;
+	/**
 	 * 提取当前所有订单信息
 	 * @return
 	 * @throws BaseException

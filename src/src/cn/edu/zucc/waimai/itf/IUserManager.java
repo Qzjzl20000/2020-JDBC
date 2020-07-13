@@ -8,9 +8,40 @@ import src.cn.edu.zucc.waimai.model.BeanSp;
 import src.cn.edu.zucc.waimai.model.BeanUser;
 import src.cn.edu.zucc.waimai.model.BeanUserAdd;
 import src.cn.edu.zucc.waimai.model.BeanUserBUYCAR;
+import src.cn.edu.zucc.waimai.model.BeanUserYHQ;
 import src.cn.edu.zucc.waimai.util.BaseException;
 
 public interface IUserManager {
+	/**
+	 * 购买数量
+	 * @return
+	 * @throws BaseException
+	 */
+	public int BUY_count(BeanUser user)throws BaseException;
+	/**
+	 * 购买金额
+	 * @return
+	 * @throws BaseException
+	 */
+	public float BUY_money(BeanUser user)throws BaseException;
+	/**
+	 * 购买操作
+	 * @return
+	 * @throws BaseException
+	 */
+	public void BUY(BeanUser user,float money,int count,String time,int add,BeanUserYHQ yhq)throws BaseException;
+	/**
+	 * 提取当前用户适合的优惠券信息
+	 * @return
+	 * @throws BaseException
+	 */
+	public List<BeanUserYHQ> loadYHyhq_CanBeUse(BeanUser user)throws BaseException;
+	/**
+	 * 删除当前用户购物车记录
+	 * @return
+	 * @throws BaseException
+	 */
+	public void deleteBUYCAR(BeanUserBUYCAR buycar)throws BaseException;
 	/**
 	 * 提取当前用户购物车信息
 	 * @return

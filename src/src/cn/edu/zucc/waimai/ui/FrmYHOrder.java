@@ -80,9 +80,6 @@ public class FrmYHOrder extends JFrame{
 	private JMenuItem menuItem_2 = new JMenuItem("返回主界面");
 	private JMenu menu_5 = new JMenu("管理用户订单");
 	private JMenuItem menuItem_7 = new JMenuItem("查看订单（刷新）");
-	private JMenuItem menuItem_6 = new JMenuItem("查看取消的订单");
-	private JMenuItem menuItem_9_1_1 = new JMenuItem("查看正在进行的订单");
-	private JMenuItem menuItem_8 = new JMenuItem("查看已完成的订单");
 
 	
 	
@@ -111,14 +108,7 @@ public class FrmYHOrder extends JFrame{
 				reloadYHOrderTable();
 			}
 		});
-		menu_5.add(menuItem_6);
-		menuItem_6.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-		menu_5.add(menuItem_9_1_1);
-		menu_5.add(menuItem_8);
+		
 		
 		
 		this.getContentPane().add(new JScrollPane(this.dataTableYHOrderJTable), BorderLayout.CENTER);

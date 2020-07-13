@@ -22,8 +22,6 @@ import src.cn.edu.zucc.waimai.WaiMaiUtil;
 import src.cn.edu.zucc.waimai.model.BeanCMD;
 import src.cn.edu.zucc.waimai.model.BeanOrder;
 import src.cn.edu.zucc.waimai.model.BeanQs;
-import src.cn.edu.zucc.waimai.model.BeanQsbill;
-import src.cn.edu.zucc.waimai.model.BeanUser;
 import src.cn.edu.zucc.waimai.util.BaseException;
 
 import javax.swing.JMenuBar;
@@ -146,32 +144,33 @@ public class FrmCMDOrder extends JFrame{
 		menu_5.add(menuItem_9_1_1);//修改订单状态
 		menuItem_9_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int i=FrmCMDOrder.this.dataTableSjJTable.getSelectedRow();
+				int i=FrmCMDOrder.this.dataTableSjFLJTable.getSelectedRow();
 				if(i<0) {
-					JOptionPane.showMessageDialog(null, "未选择骑手", "错误",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "未选择订单", "错误",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-//				FrmCMDmodifyQS dlg=new FrmCMDmodifyQS(allSj.get(i));
-//				dlg.setVisible(true);
+				FrmCMDmodifyOrderState dlg=new FrmCMDmodifyOrderState(allSjFLs.get(i));
+				dlg.setVisible(true);
 			}
 		});
 		
 		
 
 		this.getContentPane().add(new JScrollPane(this.dataTableSjJTable), BorderLayout.WEST);
-		//JScrollPane 滚动条
-//	    this.dataTableSjJTable.addMouseListener(new MouseAdapter (){
-//			@Override
-//			public void mouseClicked(MouseEvent e) {//鼠标点击动作，列出右边的列表
-//				FrmCMDOrder.this.reloadQsbillTable();
-//			}
-//	    });
+//		JScrollPane 滚动条
+	    this.dataTableSjJTable.addMouseListener(new MouseAdapter (){
+			@Override
+			public void mouseClicked(MouseEvent e) {//鼠标点击动作，列出右边的列表
+				FrmCMDOrder.this.reloadQsbillTable();
+			}
+	    });
 		this.getContentPane().add(new JScrollPane(this.dataTableSjFLJTable), BorderLayout.CENTER);
 		
 		
 		
 		this.reloadQsTable();//初始展现骑手信息
 		this.reloadQsbillTable();//初始展现订单信息
+		
 		//状态栏
 		contentPane.setLayout(new FlowLayout(FlowLayout.LEFT));
 		JLabel label=new JLabel("欢迎您，尊敬的"+BeanCMD.currentLoginCMD.getCMD_name()+"管理员！");

@@ -3,7 +3,7 @@ package src.cn.edu.zucc.waimai.model;
 import java.sql.Timestamp;
 
 public class BeanUserYHQ {
-	public static final String[] UserYHQtableTitles={"优惠券编号","优惠金额","优惠券数量","结束日期"};
+	public static final String[] UserYHQtableTitles={"商家编号","优惠券编号","优惠金额","优惠券数量","结束日期"};
 	private int user_id;
 	private int youhuiquan_id;
 	private int sj_id;
@@ -12,9 +12,10 @@ public class BeanUserYHQ {
 	private Timestamp youhuiquan_end_time;
 	
 	public String getCell(int col){
-		if(col==0) return ""+this.getYouhuiquan_id();
-		else if(col==1) return ""+this.getYouhui_money()+"元";
-		else if(col==2) return ""+this.getYouhuiquan_count()+"张";
+		if(col==0) return ""+this.getSj_id();
+		else if(col==1) return ""+this.getYouhuiquan_id();
+		else if(col==2) return ""+this.getYouhui_money()+"元";
+		else if(col==3) return ""+this.getYouhuiquan_count()+"张";
 		else if(col==4) return ""+this.getYouhuiquan_end_time();
 		else return "";
 	}

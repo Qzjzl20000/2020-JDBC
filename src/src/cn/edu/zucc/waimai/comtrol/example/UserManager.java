@@ -2,9 +2,13 @@ package src.cn.edu.zucc.waimai.comtrol.example;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.SimpleFormatter;
+import java.util.zip.DataFormatException;
 
+import javax.swing.JOptionPane;
 
 import src.cn.edu.zucc.waimai.itf.IUserManager;
 import src.cn.edu.zucc.waimai.model.BeanOrder;
@@ -20,6 +24,201 @@ import src.cn.edu.zucc.waimai.util.DBUtil;
 import src.cn.edu.zucc.waimai.util.DbException;
 
 public class UserManager implements IUserManager {
+	@Override
+	public int BUY_count(BeanUser user)throws BaseException{
+		java.sql.Connection conn =null;
+		int count=0;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select sp_count from user_car where user_id=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1, user.getUser_id());
+			java.sql.ResultSet rSet=pst.executeQuery();
+			while(rSet.next()) {
+				count = count+rSet.getInt(1);
+			}
+			rSet.close();
+			pst.close();
+			return count;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public float BUY_money(BeanUser user)throws BaseException{
+		java.sql.Connection conn =null;
+		float money=0;
+		
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select sp_count,sp_one_money from user_car where user_id=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1, user.getUser_id());
+			java.sql.ResultSet rSet=pst.executeQuery();
+			while(rSet.next()) {
+				money = money+rSet.getInt(1)*rSet.getFloat(2);
+			}
+			
+			rSet.close();
+			pst.close();
+			return money;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public void BUY(BeanUser user,float money,int count,String time,int add,BeanUserYHQ yhq)throws BaseException{
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql="insert into order_data(sj_id,user_id,qs_id,mj_id,order_origin_money,order_final_money,youhuiquan_id,order_set_time,order_set_arrive_time,user_address_id,order_state)"
+					+ " values(?,?,0,0,?,?,?,now(),?,?,?)";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1, yhq.getSj_id());
+			pst.setInt(2, user.getUser_id());
+			pst.setFloat(3, money);
+			pst.setFloat(4, money-yhq.getYouhui_money());
+			pst.setInt(5, yhq.getYouhuiquan_id());
+			pst.setTimestamp(6, Timestamp.valueOf(time));
+			pst.setInt(7, add);
+			pst.setString(8, "未接单");
+			pst.execute();
+			pst.close();
+			
+			sql="delete from user_car where user_id=?";
+			pst=conn.prepareStatement(sql);
+			pst.setInt(1, user.getUser_id());
+			pst.execute();
+			pst.close();
+			sql="update user_youhuiquan_get set youhuiquan_count=youhuiquan_count-1 where youhuiquan_id=?";
+			pst=conn.prepareStatement(sql);
+			pst.setInt(1, yhq.getYouhuiquan_id());
+			pst.execute();
+			pst.close();
+			conn.commit();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.commit();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public List<BeanUserYHQ> loadYHyhq_CanBeUse(BeanUser user)throws BaseException{
+		List<BeanUserYHQ> result=new ArrayList<BeanUserYHQ>();
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			Timestamp timestamp=null;
+			String sql="select ADDDATE(now(),interval 0 year)";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next())
+				 timestamp=rs.getTimestamp(1);
+			rs.close();
+			pst.close();
+			String sql1="select youhuiquan_id,sj_id,youhui_money,youhuiquan_count,youhuiquan_end_time"
+					+ " from user_youhuiquan_get"
+					+ " where user_id =?";
+			//满足时间要在有效期内
+			java.sql.PreparedStatement pst1= conn.prepareStatement(sql1);
+			pst1.setInt(1,user.getUser_id());
+			java.sql.ResultSet rs1=pst1.executeQuery();
+			while(rs1.next()&&(rs1.getTimestamp(5).after(timestamp))) {
+				BeanUserYHQ p=new BeanUserYHQ();
+				p.setUser_id(user.getUser_id());
+				p.setYouhuiquan_id(rs1.getInt(1));
+				p.setSj_id(rs1.getInt(2));
+				p.setYouhui_money(rs1.getFloat(3));
+				p.setYouhuiquan_count(rs1.getInt(4));
+				p.setYouhuiquan_end_time(rs1.getTimestamp(5));
+				result.add(p);
+			}
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public void deleteBUYCAR(BeanUserBUYCAR buycar)throws BaseException{
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from user_car where sp_id= ?";
+			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
+			pst.setInt(1,buycar.getSp_id());
+			java.sql.ResultSet rs=pst.executeQuery();
+			if(rs.next()) {
+				rs.close();
+				pst.close();
+				sql="delete from user_car where sp_id=?";
+				pst=conn.prepareStatement(sql);
+				pst.setInt(1, buycar.getSp_id());
+				pst.execute();
+				pst.close();
+			}else {
+				rs.close();
+				pst.close();
+				throw new BusinessException("该商品在购物车中已经不存在！");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	@Override
 	public List<BeanUserBUYCAR> loadAllBUYCAR(BeanUser user)throws BaseException{
 		List<BeanUserBUYCAR> result=new ArrayList<BeanUserBUYCAR>();

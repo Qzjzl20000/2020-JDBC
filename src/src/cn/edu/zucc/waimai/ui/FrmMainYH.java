@@ -144,9 +144,7 @@ public class FrmMainYH extends JFrame{
 	private JMenuItem mntmNewMenuItem_2_1_1 = new JMenuItem("查看商家优惠券");
 	private JMenu menu_3 = new JMenu("查看持有优惠券");
 	private JMenuItem mntmNewMenuItem_1 = new JMenuItem("查看持有优惠券");
-	private JMenu menu_4 = new JMenu("查看集单进度");
-	private JMenuItem mntmNewMenuItem_1_1 = new JMenuItem("查看集单进度");
-	private JMenu menu = new JMenu("购买");
+	private JMenu menu = new JMenu("购物车");
 	private JMenuItem menuItem_10 =new JMenuItem("加入购物车");
 	private JMenuItem menuItem_133 =new JMenuItem("查看购物车");
 	private JMenu menu1 =new JMenu("退出登陆");
@@ -213,8 +211,6 @@ public class FrmMainYH extends JFrame{
 			}
 		});
 		
-		menuBar.add(menu_4);//查看集单进度
-		menu_4.add(mntmNewMenuItem_1_1);
 		
 		menuBar.add(menu);
 		menu.add(menuItem_10);//加购物车
@@ -227,8 +223,6 @@ public class FrmMainYH extends JFrame{
 				}
 				try {
 					WaiMaiUtil.userManager.YHaddBUYCAR(BeanUser.currentLoginUser, allSp.get(i));
-					System.out.println(BeanUser.currentLoginUser);
-					System.out.println(allSp.get(i).getSp_id());
 					JOptionPane.showMessageDialog(null, "添加购物车成功", "系统提示",JOptionPane.INFORMATION_MESSAGE);
 				} catch (BaseException e1) {
 					// TODO Auto-generated catch block
@@ -236,11 +230,11 @@ public class FrmMainYH extends JFrame{
 				}
 			}
 		});
-		menu.add(menuItem_133);
+		menu.add(menuItem_133);//查看购物车
 		menuItem_133.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				FrmYHsjBUYCAR dlg=new FrmYHsjBUYCAR();
+				FrmYHBUY dlg=new FrmYHBUY();
 				dlg.setVisible(true);
 			}
 		});
