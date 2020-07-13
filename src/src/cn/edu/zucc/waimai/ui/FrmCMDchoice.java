@@ -36,7 +36,7 @@ public class FrmCMDchoice extends JFrame {
 	 */
 	public FrmCMDchoice() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(500, 300, 294, 336);
+		setBounds(500, 300, 296, 387);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -121,6 +121,21 @@ public class FrmCMDchoice extends JFrame {
 		});
 		btnNewButton_2.setBounds(67, 251, 164, 51);
 		contentPane.add(btnNewButton_2);
+		
+		JButton btnNewButton_2_1 = new JButton("返回登陆界面");
+		btnNewButton_2_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					FrmLogin dlg=new FrmLogin();
+					dlg.setVisible(true);
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				setVisible(false);
+			}
+		});
+		btnNewButton_2_1.setBounds(142, 315, 135, 29);
+		contentPane.add(btnNewButton_2_1);
 	}
-
 }

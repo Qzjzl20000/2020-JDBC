@@ -141,7 +141,6 @@ public class FrmMainYH extends JFrame{
 	private JMenuItem mntmNewMenuItem_2_1_22 = new JMenuItem("查看商家（刷新）");
 	private JMenuItem mntmNewMenuItem_2_1 = new JMenuItem("查看商家满减方案");
 	private JMenuItem mntmNewMenuItem_2_1_1 = new JMenuItem("查看商家优惠券");
-	private JMenuItem mntmNewMenuItem_2_1_1_1 = new JMenuItem("查看商家集单政策");
 	private JMenu menu_3 = new JMenu("查看持有优惠券");
 	private JMenuItem mntmNewMenuItem_1 = new JMenuItem("查看持有优惠券");
 	private JMenu menu_4 = new JMenu("查看集单进度");
@@ -149,11 +148,12 @@ public class FrmMainYH extends JFrame{
 	private JMenu menu = new JMenu("购买");
 	private JMenuItem menuItem_10 =new JMenuItem("加入购物车");
 	private JMenuItem menuItem_11 =new JMenuItem("购买");
+	private JMenu menu1 =new JMenu("退出登陆");
+	private JMenuItem menuItem_12 =new JMenuItem("返回主界面");
 	
 	public FrmMainYH() {
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
 		this.setTitle("外卖管理系统");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setJMenuBar(menuBar);
 		menuBar.add(menu_1);
 		menu_1.add(menuItem_7_1_1);
@@ -186,16 +186,39 @@ public class FrmMainYH extends JFrame{
 			}
 		});
 		menu_2.add(mntmNewMenuItem_2_1);
-		
+		mntmNewMenuItem_2_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FrmYHsjMJ dlg=new FrmYHsjMJ();
+				dlg.setVisible(true);
+			}
+		});
 		menu_2.add(mntmNewMenuItem_2_1_1);
-		menu_2.add(mntmNewMenuItem_2_1_1_1);
+		mntmNewMenuItem_2_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FrmYHsjYHQ dlg=new FrmYHsjYHQ();
+				dlg.setVisible(true);
+			}
+		});
+
 		menuBar.add(menu_3);
 		menu_3.add(mntmNewMenuItem_1);
+		
 		menuBar.add(menu_4);
 		menu_4.add(mntmNewMenuItem_1_1);
+		
 		menuBar.add(menu);
 		menu.add(menuItem_10);
 		menu.add(menuItem_11);
+		
+		menuBar.add(menu1);
+		menu1.add(menuItem_12);
+		menuItem_12.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FrmLogin dlg=new FrmLogin();
+				dlg.setVisible(true);
+				setVisible(false);
+			}
+		});
 		
 		this.getContentPane().add(new JScrollPane(this.dataTableSjJTable), BorderLayout.WEST);
 		//JScrollPane 滚动条

@@ -76,7 +76,6 @@ public class FrmCMDcmd extends JFrame{
 	private JMenu menu_6 = new JMenu("管理员信息");
 	private JMenuItem menuItem_2 = new JMenuItem("修改当前管理员");
 	private JMenuItem menuItem_4 = new JMenuItem("添加管理员");
-	private JMenuItem menuItem_5 = new JMenuItem("删除管理员");
 	
 	
 	public FrmCMDcmd() {
@@ -108,10 +107,6 @@ public class FrmCMDcmd extends JFrame{
 			dlg.setFm(this);
 			dlg.setVisible(true);
 			setEnabled(false);
-		});
-		menu_6.add(menuItem_5);
-		menuItem_5.addActionListener((e)-> {
-			
 		});
 		
 		this.getContentPane().add(new JScrollPane(this.dataTableCMDJTable), BorderLayout.WEST);
