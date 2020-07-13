@@ -9,8 +9,10 @@ import java.util.List;
 import src.cn.edu.zucc.waimai.itf.IUserManager;
 import src.cn.edu.zucc.waimai.model.BeanOrder;
 import src.cn.edu.zucc.waimai.model.BeanSjYHQ;
+import src.cn.edu.zucc.waimai.model.BeanSp;
 import src.cn.edu.zucc.waimai.model.BeanUser;
 import src.cn.edu.zucc.waimai.model.BeanUserAdd;
+import src.cn.edu.zucc.waimai.model.BeanUserBUYCAR;
 import src.cn.edu.zucc.waimai.model.BeanUserYHQ;
 import src.cn.edu.zucc.waimai.util.BaseException;
 import src.cn.edu.zucc.waimai.util.BusinessException;
@@ -18,6 +20,92 @@ import src.cn.edu.zucc.waimai.util.DBUtil;
 import src.cn.edu.zucc.waimai.util.DbException;
 
 public class UserManager implements IUserManager {
+	@Override
+	public List<BeanUserBUYCAR> loadAllBUYCAR(BeanUser user)throws BaseException{
+		List<BeanUserBUYCAR> result=new ArrayList<BeanUserBUYCAR>();
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from user_car where user_id=? ";
+			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
+			pst.setInt(1,user.getUser_id());
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next()) {
+				BeanUserBUYCAR p=new BeanUserBUYCAR();
+				p.setSj_id(rs.getInt(1));
+				p.setSp_id(rs.getInt(2));
+				p.setUser_id(rs.getInt(3));
+				p.setSp_count(rs.getInt(4));
+				p.setSp_one_money(rs.getFloat(5));
+				result.add(p);
+			}
+			rs.close();
+			pst.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public void YHaddBUYCAR(BeanUser user,BeanSp sp)throws BaseException{
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql="select * from user_car where sp_id=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1, sp.getSp_id());
+			java.sql.ResultSet rs=pst.executeQuery();
+			if(rs.next()) {
+				rs.close();
+				pst.close();
+				sql="update user_car set sp_count=sp_count+1 where sp_id=?";
+				pst=conn.prepareStatement(sql);
+				pst.setInt(1, sp.getSp_id());
+				pst.execute();
+			}
+			else {
+				rs.close();
+				pst.close();
+				sql="insert into user_car(sj_id,sp_id,user_id,sp_count,sp_one_money) values(?,?,?,1,?)";
+				pst=conn.prepareStatement(sql);
+				pst.setInt(1, sp.getSj_id());
+				pst.setInt(2, sp.getSp_id());
+				pst.setInt(3, user.getUser_id());
+				pst.setFloat(4, sp.getSp_price());
+				pst.execute();
+			}
+			pst.close();
+			conn.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	@Override
 	public void YHgetYHQ(BeanUser user,BeanSjYHQ yhq)throws BaseException{
 		java.sql.Connection conn =null;

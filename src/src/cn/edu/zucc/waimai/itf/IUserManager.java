@@ -4,11 +4,25 @@ import java.util.List;
 
 import src.cn.edu.zucc.waimai.model.BeanOrder;
 import src.cn.edu.zucc.waimai.model.BeanSjYHQ;
+import src.cn.edu.zucc.waimai.model.BeanSp;
 import src.cn.edu.zucc.waimai.model.BeanUser;
 import src.cn.edu.zucc.waimai.model.BeanUserAdd;
+import src.cn.edu.zucc.waimai.model.BeanUserBUYCAR;
 import src.cn.edu.zucc.waimai.util.BaseException;
 
 public interface IUserManager {
+	/**
+	 * 提取当前用户购物车信息
+	 * @return
+	 * @throws BaseException
+	 */
+	public List<BeanUserBUYCAR> loadAllBUYCAR(BeanUser user)throws BaseException;
+	/**
+	 * 用户加入购物车
+	 * @return
+	 * @throws BaseException
+	 */
+	public void YHaddBUYCAR(BeanUser user,BeanSp sp)throws BaseException;
 	/**
 	 * 获取商家优惠券
 	 * @return

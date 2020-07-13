@@ -106,6 +106,7 @@ public class FrmMainYH extends JFrame{
 	private Object SptableData[][];
 	private DefaultTableModel tableSpModel=new DefaultTableModel();
 	private JTable dataTableSpJTable =new JTable(tableSpModel);
+	private BeanSp curSp=null;
 	List<BeanSp> allSp=null;
 	private void reloadSpTable(int idx){
 		if(idx<0) return;
@@ -147,7 +148,7 @@ public class FrmMainYH extends JFrame{
 	private JMenuItem mntmNewMenuItem_1_1 = new JMenuItem("查看集单进度");
 	private JMenu menu = new JMenu("购买");
 	private JMenuItem menuItem_10 =new JMenuItem("加入购物车");
-	private JMenuItem menuItem_11 =new JMenuItem("购买");
+	private JMenuItem menuItem_133 =new JMenuItem("查看购物车");
 	private JMenu menu1 =new JMenu("退出登陆");
 	private JMenuItem menuItem_12 =new JMenuItem("返回主界面");
 	
@@ -217,7 +218,32 @@ public class FrmMainYH extends JFrame{
 		
 		menuBar.add(menu);
 		menu.add(menuItem_10);//加购物车
-		menu.add(menuItem_11);//购买
+		menuItem_10.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int i=FrmMainYH.this.dataTableSpJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择加入购物车商品", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				try {
+					WaiMaiUtil.userManager.YHaddBUYCAR(BeanUser.currentLoginUser, allSp.get(i));
+					System.out.println(BeanUser.currentLoginUser);
+					System.out.println(allSp.get(i).getSp_id());
+					JOptionPane.showMessageDialog(null, "添加购物车成功", "系统提示",JOptionPane.INFORMATION_MESSAGE);
+				} catch (BaseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		menu.add(menuItem_133);
+		menuItem_133.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				FrmYHsjBUYCAR dlg=new FrmYHsjBUYCAR();
+				dlg.setVisible(true);
+			}
+		});
 		
 		menuBar.add(menu1);
 		menu1.add(menuItem_12);
