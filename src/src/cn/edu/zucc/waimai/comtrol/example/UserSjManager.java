@@ -6,6 +6,7 @@ import java.util.List;
 
 import src.cn.edu.zucc.waimai.model.BeanSp;
 import src.cn.edu.zucc.waimai.model.BeanUser;
+import src.cn.edu.zucc.waimai.model.BeanUserAdd;
 import src.cn.edu.zucc.waimai.model.BeanUserJD;
 import src.cn.edu.zucc.waimai.model.BeanUserYHQ;
 import src.cn.edu.zucc.waimai.itf.IUserSj;
@@ -20,14 +21,15 @@ import src.cn.edu.zucc.waimai.util.DbException;
 
 public class UserSjManager implements IUserSj {
 	@Override
-	public List<BeanUserJD> loadMJ(BeanUser user)throws BaseException{
+	public List<BeanUserJD> loadMJ(BeanUser user,BeanSj sj)throws BaseException{
 		List<BeanUserJD> result=new ArrayList<BeanUserJD>();
 		java.sql.Connection conn =null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from user_youhuiquan_jding where user_id=?";
+			String sql="select * from user_youhuiquan_jding where user_id=? and sj_id=?";
 			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
 			pst.setInt(1, user.getUser_id());
+			pst.setInt(2, sj.getSj_id());
 			java.sql.ResultSet rs=pst.executeQuery();
 			while(rs.next()) {
 				BeanUserJD p=new BeanUserJD();
@@ -57,14 +59,15 @@ public class UserSjManager implements IUserSj {
 		
 	}
 	@Override
-	public List<BeanUserYHQ> loadYHQ(BeanUser user)throws BaseException{
+	public List<BeanUserYHQ> loadYHQ(BeanUser user,BeanSj sj)throws BaseException{
 		List<BeanUserYHQ> result=new ArrayList<BeanUserYHQ>();
 		java.sql.Connection conn =null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from user_youhuiquan_get where user_id=?";
+			String sql="select * from user_youhuiquan_get where user_id=? and sj_id=?";
 			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
 			pst.setInt(1, user.getUser_id());
+			pst.setInt(2, sj.getSj_id());
 			java.sql.ResultSet rs=pst.executeQuery();
 			while(rs.next()) {
 				BeanUserYHQ p=new BeanUserYHQ();

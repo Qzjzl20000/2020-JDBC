@@ -190,6 +190,7 @@ public class FrmMainYH extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				FrmYHsjMJ dlg=new FrmYHsjMJ();
 				dlg.setVisible(true);
+				setVisible(false);
 			}
 		});
 		menu_2.add(mntmNewMenuItem_2_1_1);
@@ -197,26 +198,34 @@ public class FrmMainYH extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				FrmYHsjYHQ dlg=new FrmYHsjYHQ();
 				dlg.setVisible(true);
+				setVisible(false);
 			}
 		});
 
-		menuBar.add(menu_3);
+		menuBar.add(menu_3);//查看持有优惠券
 		menu_3.add(mntmNewMenuItem_1);
+		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FrmYHgetYHQ dlg=new FrmYHgetYHQ();
+				dlg.setVisible(true);
+				setVisible(false);
+			}
+		});
 		
-		menuBar.add(menu_4);
+		menuBar.add(menu_4);//查看集单进度
 		menu_4.add(mntmNewMenuItem_1_1);
 		
 		menuBar.add(menu);
-		menu.add(menuItem_10);
-		menu.add(menuItem_11);
+		menu.add(menuItem_10);//加购物车
+		menu.add(menuItem_11);//购买
 		
 		menuBar.add(menu1);
 		menu1.add(menuItem_12);
 		menuItem_12.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
 				FrmLogin dlg=new FrmLogin();
 				dlg.setVisible(true);
-				setVisible(false);
 			}
 		});
 		

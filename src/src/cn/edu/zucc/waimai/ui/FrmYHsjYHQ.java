@@ -110,6 +110,7 @@ public class FrmYHsjYHQ extends JFrame{
 	private JMenuItem menuItem_7_1_1 = new JMenuItem("返回主界面");
 	private JMenu menu_2 = new JMenu("查看优惠券");
 	private JMenuItem mntmNewMenuItem_2_1_22 = new JMenuItem("查看优惠券（刷新）");
+	private JMenuItem mntmNewMenuItem_2 = new JMenuItem("获取");
 	
 	public FrmYHsjYHQ() {
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -129,6 +130,23 @@ public class FrmYHsjYHQ extends JFrame{
 		mntmNewMenuItem_2_1_22.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				reloadSjTable();
+			}
+		});
+		menu_2.add(mntmNewMenuItem_2);
+		mntmNewMenuItem_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int i=FrmYHsjYHQ.this.dataTableSjFLJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择优惠券", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				try {
+					WaiMaiUtil.userManager.YHgetYHQ(BeanUser.currentLoginUser, allSjFLs.get(i));
+					JOptionPane.showMessageDialog(null, "获取优惠券成功", "系统提示",JOptionPane.INFORMATION_MESSAGE);
+				} catch (BaseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		

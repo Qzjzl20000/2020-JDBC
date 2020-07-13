@@ -74,6 +74,7 @@ public class FrmCMDcmd extends JFrame{
 	private JMenu menu_4 = new JMenu("返回");
 	private JMenuItem menuItem_1 = new JMenuItem("返回主界面");
 	private JMenu menu_6 = new JMenu("管理员信息");
+	private JMenuItem menuItem_3 = new JMenuItem("查看管理员（刷新）");
 	private JMenuItem menuItem_2 = new JMenuItem("修改当前管理员");
 	private JMenuItem menuItem_4 = new JMenuItem("添加管理员");
 	
@@ -93,6 +94,10 @@ public class FrmCMDcmd extends JFrame{
 			}
 		});
 		menuBar.add(menu_6);
+		menu_6.add(menuItem_3);
+		menuItem_3.addActionListener((e)-> {
+			reloadCMDTable();
+		});
 		menu_6.add(menuItem_2);
 		menuItem_2.addActionListener((e)-> {
 			FrmCMDmodifycmd dlg=new FrmCMDmodifycmd();
@@ -109,7 +114,7 @@ public class FrmCMDcmd extends JFrame{
 			setEnabled(false);
 		});
 		
-		this.getContentPane().add(new JScrollPane(this.dataTableCMDJTable), BorderLayout.WEST);
+		this.getContentPane().add(new JScrollPane(this.dataTableCMDJTable), BorderLayout.CENTER);
 		//JScrollPane 滚动条
 	   
 	

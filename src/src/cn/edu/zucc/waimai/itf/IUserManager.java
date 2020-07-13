@@ -3,11 +3,18 @@ package src.cn.edu.zucc.waimai.itf;
 import java.util.List;
 
 import src.cn.edu.zucc.waimai.model.BeanOrder;
+import src.cn.edu.zucc.waimai.model.BeanSjYHQ;
 import src.cn.edu.zucc.waimai.model.BeanUser;
 import src.cn.edu.zucc.waimai.model.BeanUserAdd;
 import src.cn.edu.zucc.waimai.util.BaseException;
 
 public interface IUserManager {
+	/**
+	 * 获取商家优惠券
+	 * @return
+	 * @throws BaseException
+	 */
+	public void YHgetYHQ(BeanUser user,BeanSjYHQ yhq)throws BaseException;
 	/**
 	 * 提取当前用户信息
 	 * @return

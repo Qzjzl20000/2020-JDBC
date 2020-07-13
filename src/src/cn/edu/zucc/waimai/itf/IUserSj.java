@@ -7,6 +7,7 @@ import src.cn.edu.zucc.waimai.model.BeanSjMJ;
 import src.cn.edu.zucc.waimai.model.BeanSjYHQ;
 import src.cn.edu.zucc.waimai.model.BeanSp;
 import src.cn.edu.zucc.waimai.model.BeanUser;
+import src.cn.edu.zucc.waimai.model.BeanUserAdd;
 import src.cn.edu.zucc.waimai.model.BeanUserJD;
 import src.cn.edu.zucc.waimai.model.BeanUserYHQ;
 import src.cn.edu.zucc.waimai.util.BaseException;
@@ -17,13 +18,13 @@ public interface IUserSj {
 	 * @return
 	 * @throws BaseException
 	 */
-	public List<BeanUserJD> loadMJ(BeanUser user)throws BaseException;
+	public List<BeanUserJD> loadMJ(BeanUser user,BeanSj sj)throws BaseException;
 	/**
 	 * 提取当前用户所有商家优惠券信息
 	 * @return
 	 * @throws BaseException
 	 */
-	public List<BeanUserYHQ> loadYHQ(BeanUser user)throws BaseException;
+	public List<BeanUserYHQ> loadYHQ(BeanUser user,BeanSj sj)throws BaseException;
 	/**
 	 * 提取当前所有商家满减信息
 	 * @return
