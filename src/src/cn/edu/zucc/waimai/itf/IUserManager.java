@@ -3,6 +3,7 @@ package src.cn.edu.zucc.waimai.itf;
 import java.util.List;
 
 import src.cn.edu.zucc.waimai.model.BeanOrder;
+import src.cn.edu.zucc.waimai.model.BeanQs;
 import src.cn.edu.zucc.waimai.model.BeanSjYHQ;
 import src.cn.edu.zucc.waimai.model.BeanSp;
 import src.cn.edu.zucc.waimai.model.BeanUser;
@@ -13,17 +14,34 @@ import src.cn.edu.zucc.waimai.util.BaseException;
 
 public interface IUserManager {
 	/**
+	 * 删除地址
+	 * 可以为空
+	 */
+	public void modifyAdd(BeanUserAdd useradd,String province,String city, String area,
+			String adddetail,String name,String phoneNum) throws BaseException;
+	/**
+	 * 删除地址
+	 * 
+	 */
+	public void deleteYHAD(BeanUserAdd useradd) throws BaseException;
+	/**
 	 * 购买数量
 	 * @return
 	 * @throws BaseException
 	 */
-	public int BUY_count(BeanUser user)throws BaseException;
+	public int BUY_count(BeanUser user,int sjid)throws BaseException;
 	/**
 	 * 购买金额
 	 * @return
 	 * @throws BaseException
 	 */
-	public float BUY_money(BeanUser user)throws BaseException;
+	public float BUY_money(BeanUser user,int sjid)throws BaseException;
+	/**
+	 * 无优惠购买操作
+	 * @return
+	 * @throws BaseException
+	 */
+	public void BUYwithout(BeanUser user,float money,int count,String time,int add,int sj_id)throws BaseException;
 	/**
 	 * 购买操作
 	 * @return

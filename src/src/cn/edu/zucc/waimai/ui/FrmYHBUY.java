@@ -174,7 +174,8 @@ public class FrmYHBUY extends JFrame{
 		menu_6.add(menuItem_2);//不使用优惠券结算
 		menuItem_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				FrmYHCheck_without dlg=new FrmYHCheck_without();
+				dlg.setVisible(true);
 			}
 		});
 		

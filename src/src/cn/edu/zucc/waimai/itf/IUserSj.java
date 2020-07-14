@@ -1,6 +1,8 @@
 package src.cn.edu.zucc.waimai.itf;
 
 import java.util.List;
+
+import src.cn.edu.zucc.waimai.model.BeanOrder;
 import src.cn.edu.zucc.waimai.model.BeanSj;
 import src.cn.edu.zucc.waimai.model.BeanSjFL;
 import src.cn.edu.zucc.waimai.model.BeanSjMJ;
@@ -13,6 +15,16 @@ import src.cn.edu.zucc.waimai.model.BeanUserYHQ;
 import src.cn.edu.zucc.waimai.util.BaseException;
 
 public interface IUserSj {
+	/**
+	 * 取消订单
+	 * 能修改姓名、等级
+	 */
+	public void cancleOrder(BeanOrder order) throws BaseException;
+	/**
+	 * 确认收货
+	 * 
+	 */
+	public void insureOrder(BeanOrder order) throws BaseException;
 	/**
 	 * 提取当前用户所有商家满减信息
 	 * @return

@@ -23,13 +23,14 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 
-public class FrmYHCheckOut_with extends JFrame {
+public class FrmYHCheck_without extends JFrame {
 
 	private JPanel contentPane;
 	public float money=0;
 	public int count=0;
 	private JTextField textField;
 	private JTextField textField_1;
+	private JTextField textField_2;
 	/**
 	 * Launch the application.
 	 */
@@ -49,48 +50,37 @@ public class FrmYHCheckOut_with extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FrmYHCheckOut_with() {
-		
-	}
-	public FrmYHCheckOut_with(BeanUserYHQ yhq) {
+	public FrmYHCheck_without() {
 		setTitle("优惠券结账");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 332, 289);
+		setBounds(100, 100, 333, 223);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		try {
-			System.out.println(BeanUser.currentLoginUser);
-			money=WaiMaiUtil.userManager.BUY_money(BeanUser.currentLoginUser,yhq.getSj_id());
-		} catch (BaseException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		try {
-			count=WaiMaiUtil.userManager.BUY_count(BeanUser.currentLoginUser,yhq.getSj_id());
-		} catch (BaseException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
+	
 		
-		JLabel lblNewLabel = new JLabel("您选择了"+money+"元的商品");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(25, 44, 270, 32);
-		contentPane.add(lblNewLabel);
-		float after=money-yhq.getYouhui_money();
-		JLabel lblNewLabel_1 = new JLabel("累计共"+count+"件,优惠后需"+after+"元");
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setBounds(25, 74, 270, 32);
-		contentPane.add(lblNewLabel_1);
-		
-		JButton btnNewButton = new JButton("使用优惠券并下单");
+		JButton btnNewButton = new JButton("原价下单");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String time=new String(textField.getText());
 				String add=new String(textField_1.getText());
+				String sjid=new String(textField_2.getText());
 				try {
-					WaiMaiUtil.userManager.BUY(BeanUser.currentLoginUser, money, count, time, Integer.parseInt(add), yhq);
+					try {
+						System.out.println(BeanUser.currentLoginUser);
+						money=WaiMaiUtil.userManager.BUY_money(BeanUser.currentLoginUser,Integer.parseInt(sjid));
+					} catch (BaseException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					try {
+						count=WaiMaiUtil.userManager.BUY_count(BeanUser.currentLoginUser,Integer.parseInt(sjid));
+					} catch (BaseException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					WaiMaiUtil.userManager.BUYwithout(BeanUser.currentLoginUser, money, count, time, Integer.parseInt(add), Integer.parseInt(sjid));
 					JOptionPane.showMessageDialog(null, "购买成功！", "系统提示",JOptionPane.INFORMATION_MESSAGE);
 					setVisible(false);
 				} catch (NumberFormatException | BaseException e1) {
@@ -99,7 +89,7 @@ public class FrmYHCheckOut_with extends JFrame {
 				}
 			}
 		});
-		btnNewButton.setBounds(200, 208, 117, 45);
+		btnNewButton.setBounds(189, 129, 117, 45);
 		contentPane.add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("取消");
@@ -108,32 +98,37 @@ public class FrmYHCheckOut_with extends JFrame {
 				setVisible(false);
 			}
 		});
-		btnNewButton_1.setBounds(71, 208, 117, 45);
+		btnNewButton_1.setBounds(60, 129, 117, 45);
 		contentPane.add(btnNewButton_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("订单期望送达时间");
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_2.setBounds(25, 129, 115, 16);
+		lblNewLabel_2.setBounds(30, 61, 115, 16);
 		contentPane.add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_2_1 = new JLabel("订单地址编号");
 		lblNewLabel_2_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_2_1.setBounds(25, 164, 115, 16);
+		lblNewLabel_2_1.setBounds(30, 96, 115, 16);
 		contentPane.add(lblNewLabel_2_1);
 		
 		textField = new JTextField();
-		textField.setBounds(152, 124, 130, 26);
+		textField.setBounds(157, 56, 130, 26);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
 		textField_1 = new JTextField();
 		textField_1.setColumns(10);
-		textField_1.setBounds(152, 159, 130, 26);
+		textField_1.setBounds(157, 91, 130, 26);
 		contentPane.add(textField_1);
 		
-		JLabel lblNewLabel_3 = new JLabel("您选择了"+yhq.getSj_id()+"商家的"+yhq.getYouhui_money()+"元优惠券");
-		lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_3.setBounds(25, 6, 270, 32);
-		contentPane.add(lblNewLabel_3);
+		JLabel lblNewLabel_2_2 = new JLabel("指定购买商家");
+		lblNewLabel_2_2.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNewLabel_2_2.setBounds(29, 27, 115, 16);
+		contentPane.add(lblNewLabel_2_2);
+		
+		textField_2 = new JTextField();
+		textField_2.setColumns(10);
+		textField_2.setBounds(156, 23, 130, 26);
+		contentPane.add(textField_2);
 	}
 }

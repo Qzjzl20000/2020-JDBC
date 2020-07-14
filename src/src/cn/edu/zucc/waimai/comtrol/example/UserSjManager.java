@@ -4,12 +4,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import src.cn.edu.zucc.waimai.model.BeanSp;
 import src.cn.edu.zucc.waimai.model.BeanUser;
-import src.cn.edu.zucc.waimai.model.BeanUserAdd;
 import src.cn.edu.zucc.waimai.model.BeanUserJD;
 import src.cn.edu.zucc.waimai.model.BeanUserYHQ;
 import src.cn.edu.zucc.waimai.itf.IUserSj;
+import src.cn.edu.zucc.waimai.model.BeanOrder;
 import src.cn.edu.zucc.waimai.model.BeanSj;
 import src.cn.edu.zucc.waimai.model.BeanSjFL;
 import src.cn.edu.zucc.waimai.model.BeanSjMJ;
@@ -20,6 +22,134 @@ import src.cn.edu.zucc.waimai.util.DBUtil;
 import src.cn.edu.zucc.waimai.util.DbException;
 
 public class UserSjManager implements IUserSj {
+	@Override
+	public void cancleOrder(BeanOrder order) throws BaseException{
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from order_data where order_id="+order.getOrder_id();//查找订单
+			java.sql.Statement st=conn.createStatement();
+			java.sql.ResultSet rs=st.executeQuery(sql);
+			if(rs.next()) {
+				if(order.getOrder_state().equals("未接单")) {
+					rs.close();
+					st.close();
+					sql="update order_data set order_state=? where order_id= ? ";//更新操作
+					java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+					pst.setString(1, "已取消");
+					pst.setInt(2, order.getOrder_id());
+					pst.execute();
+					pst.close();
+					JOptionPane.showMessageDialog(null, "成功取消订单！", "系统提示",JOptionPane.INFORMATION_MESSAGE);
+					
+				}
+				else if(order.getOrder_state().equals("派送中")) {
+					rs.close();
+					st.close();
+					JOptionPane.showMessageDialog(null, "该订单正在派送", "错误",JOptionPane.ERROR_MESSAGE);
+					throw new BusinessException("订单状态不符合");
+				}
+				else if(order.getOrder_state().equals("已送达")) {
+					rs.close();
+					st.close();
+					JOptionPane.showMessageDialog(null, "该订单已送达", "错误",JOptionPane.ERROR_MESSAGE);
+					throw new BusinessException("订单状态不符合");
+				}
+				else if(order.getOrder_state().equals("已完成")) {
+					rs.close();
+					st.close();
+					JOptionPane.showMessageDialog(null, "该订单已结束且评价", "错误",JOptionPane.ERROR_MESSAGE);
+					throw new BusinessException("订单状态不符合");
+				}
+			}else {
+				rs.close();
+				st.close();
+				JOptionPane.showMessageDialog(null, "该订单不存在", "错误",JOptionPane.ERROR_MESSAGE);
+				throw new BusinessException("订单状态不符合");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.commit();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public void insureOrder(BeanOrder order) throws BaseException{
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from order_data where order_id="+order.getOrder_id();//查找订单
+			java.sql.Statement st=conn.createStatement();
+			java.sql.ResultSet rs=st.executeQuery(sql);
+			if(rs.next()) {
+				if(order.getOrder_state().equals("派送中")) {
+					rs.close();
+					st.close();
+					sql="update order_data set order_state=? where order_id= ? ";//更新操作
+					java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+					pst.setString(1, "已送达");
+					pst.setInt(2, order.getOrder_id());
+					pst.execute();
+					pst.close();
+					
+					sql="insert qs_bill set qs_getmoney_time=now(),qs_id=?,order_id=?,qs_getmoney=3,sp_evaluate_qsxinji=0";
+					
+					pst=conn.prepareStatement(sql);
+					pst.setInt(1, order.getQs_id());
+					pst.setInt(2, order.getOrder_id());
+					pst.execute();
+					pst.close();
+					JOptionPane.showMessageDialog(null, "成功确认收货！", "系统提示",JOptionPane.INFORMATION_MESSAGE);
+					
+				}
+				else {
+					rs.close();
+					st.close();
+					JOptionPane.showMessageDialog(null, "该订单不在配送中", "错误",JOptionPane.ERROR_MESSAGE);
+					throw new BusinessException("订单状态不符合");
+				}
+			}else {
+				rs.close();
+				st.close();
+				JOptionPane.showMessageDialog(null, "该订单不存在", "错误",JOptionPane.ERROR_MESSAGE);
+				throw new BusinessException("订单状态不符合");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.commit();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
 	@Override
 	public List<BeanUserJD> loadMJ(BeanUser user,BeanSj sj)throws BaseException{
 		List<BeanUserJD> result=new ArrayList<BeanUserJD>();

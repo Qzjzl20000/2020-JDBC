@@ -25,14 +25,86 @@ import src.cn.edu.zucc.waimai.util.DbException;
 
 public class UserManager implements IUserManager {
 	@Override
-	public int BUY_count(BeanUser user)throws BaseException{
+	public void modifyAdd(BeanUserAdd useradd,String province,String city, String area,
+			String adddetail,String name,String phoneNum) throws BaseException{
+		if(province.equals("")) {
+			province=useradd.getUser_province();
+		}
+		if(city.equals("")) {
+			city=useradd.getUser_city();
+		}
+		if(area.equals("")) {
+			area=useradd.getUser_area();
+		}
+		if(adddetail.equals("")) {
+			adddetail=useradd.getUser_add_detail();
+		}
+		if(name.equals("")) {
+			name=useradd.getUser_add_name();
+		}
+		if(phoneNum.equals("")) {
+			phoneNum=useradd.getUser_add_phonenum();
+		}
+		java.sql.Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="update user_address set user_province=?,user_city=?,user_area=?,user_address_detail=?,user_ad_name=?,user_ad_phonenum=? where user_address_id=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setString(1, province);
+			pst.setString(2, city);
+			pst.setString(3, area);
+			pst.setString(4, adddetail);
+			pst.setString(5, name);
+			pst.setString(6, phoneNum);
+			pst.setInt(7, useradd.getUser_add_id());
+			pst.execute();
+			pst.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn!=null)
+				try {
+					conn.close();
+				}catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
+	@Override
+	public void deleteYHAD(BeanUserAdd useradd) throws BaseException{
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="delete from user_address where user_address_id=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1, useradd.getUser_add_id());
+			pst.execute();
+			pst.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public int BUY_count(BeanUser user,int sjid)throws BaseException{
 		java.sql.Connection conn =null;
 		int count=0;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select sp_count from user_car where user_id=?";
+			String sql="select sp_count from user_car where user_id=? and sj_id=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1, user.getUser_id());
+			pst.setInt(2, sjid);
 			java.sql.ResultSet rSet=pst.executeQuery();
 			while(rSet.next()) {
 				count = count+rSet.getInt(1);
@@ -55,15 +127,16 @@ public class UserManager implements IUserManager {
 		}
 	}
 	@Override
-	public float BUY_money(BeanUser user)throws BaseException{
+	public float BUY_money(BeanUser user,int sjid)throws BaseException{
 		java.sql.Connection conn =null;
 		float money=0;
 		
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select sp_count,sp_one_money from user_car where user_id=?";
+			String sql="select sp_count,sp_one_money from user_car where user_id=? and sj_id=? ";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1, user.getUser_id());
+			pst.setInt(2, sjid);
 			java.sql.ResultSet rSet=pst.executeQuery();
 			while(rSet.next()) {
 				money = money+rSet.getInt(1)*rSet.getFloat(2);
@@ -82,6 +155,55 @@ public class UserManager implements IUserManager {
 					conn.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
+				}
+			}
+		}
+	}
+	@Override
+	public void BUYwithout(BeanUser user,float money,int count,String time,int add,int sj_id)throws BaseException{
+		java.sql.Connection conn =null;
+		try {
+			conn=DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql="insert into order_data(sj_id,user_id,qs_id,mj_id,order_origin_money,order_final_money,youhuiquan_id,order_set_time,order_set_arrive_time,user_address_id,order_state)"
+					+ " values(?,?,0,0,?,?,?,now(),?,?,?)";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1, sj_id);
+			pst.setInt(2, user.getUser_id());
+			pst.setFloat(3, money);
+			pst.setFloat(4, money);
+			pst.setInt(5, 0);
+			pst.setTimestamp(6, Timestamp.valueOf(time));
+			pst.setInt(7, add);
+			pst.setString(8, "未接单");
+			pst.execute();
+			pst.close();
+			
+			sql="delete from user_car where user_id=? and sj_id=?";
+			pst=conn.prepareStatement(sql);
+			pst.setInt(1, user.getUser_id());
+			pst.setInt(2, sj_id);
+			pst.execute();
+			pst.close();
+			
+			conn.commit();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.commit();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new DbException(e);
+		} finally {
+			if (conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
 				}
 			}
 		}
@@ -106,16 +228,24 @@ public class UserManager implements IUserManager {
 			pst.execute();
 			pst.close();
 			
-			sql="delete from user_car where user_id=?";
+			sql="delete from user_car where user_id=? and sj_id=?";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(1, user.getUser_id());
+			pst.setInt(2, yhq.getSj_id());
 			pst.execute();
 			pst.close();
+			
 			sql="update user_youhuiquan_get set youhuiquan_count=youhuiquan_count-1 where youhuiquan_id=?";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(1, yhq.getYouhuiquan_id());
 			pst.execute();
 			pst.close();
+			
+			sql="delete from user_youhuiquan_get where youhuiquan_count<1";
+			pst=conn.prepareStatement(sql);
+			pst.execute();
+			pst.close();
+			
 			conn.commit();
 			
 		} catch (SQLException e) {
@@ -154,7 +284,7 @@ public class UserManager implements IUserManager {
 			pst.close();
 			String sql1="select youhuiquan_id,sj_id,youhui_money,youhuiquan_count,youhuiquan_end_time"
 					+ " from user_youhuiquan_get"
-					+ " where user_id =?";
+					+ " where user_id =? and youhuiquan_count>0";
 			//满足时间要在有效期内
 			java.sql.PreparedStatement pst1= conn.prepareStatement(sql1);
 			pst1.setInt(1,user.getUser_id());
@@ -517,7 +647,7 @@ public class UserManager implements IUserManager {
 		java.sql.Connection conn =null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select user_id,user_province,user_city,user_area,user_address_detail,user_ad_name,user_ad_phonenum"
+			String sql="select user_id,user_province,user_city,user_area,user_address_detail,user_ad_name,user_ad_phonenum,user_address_id"
 					+ " from user_address where user_id=? order by user_address_id";
 			java.sql.PreparedStatement pst= conn.prepareStatement(sql);
 			pst.setInt(1, BeanUser.currentLoginUser.getUser_id());
@@ -531,6 +661,7 @@ public class UserManager implements IUserManager {
 				p.setUser_add_detail(rs.getString(5));
 				p.setUser_add_name(rs.getString(6));
 				p.setUser_add_phonenum(rs.getString(7));
+				p.setUser_add_id(rs.getInt(8));
 				result.add(p);
 			}
 			rs.close();

@@ -7,6 +7,8 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -17,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
 import src.cn.edu.zucc.waimai.WaiMaiUtil;
+import src.cn.edu.zucc.waimai.model.BeanSj;
 import src.cn.edu.zucc.waimai.model.BeanUser;
 import src.cn.edu.zucc.waimai.model.BeanUserAdd;
 import src.cn.edu.zucc.waimai.util.BaseException;
@@ -47,30 +50,30 @@ public class FrmYHadd extends JFrame{
 		});
 	}
 
-	private Object tblYHaddTitles[]=BeanUserAdd.UserAddtableTitles;//用户地址信息
-	private Object YHaddtableData[][];
-	private DefaultTableModel tableYHaddModel=new DefaultTableModel();
-	private JTable dataTableYHaddJTable =new JTable(tableYHaddModel);
-	List<BeanUserAdd> allYHadd=null;
+	private Object tblSjTitles[]=BeanUserAdd.UserAddtableTitles;//用户地址信息
+	private Object SjtableData[][];
+	private DefaultTableModel tableSjModel=new DefaultTableModel();
+	private JTable dataTableSjJTable =new JTable(tableSjModel);
+	private BeanUserAdd curSj=null;
+	List<BeanUserAdd> allSj=null;
 	
-	private void reloadYHaddTable(){
+	private void reloadSjTable(){
 		try {
-			allYHadd=WaiMaiUtil.userManager.loadAllYHadd();
+			allSj=WaiMaiUtil.userManager.loadAllYHadd();
 		} catch (BaseException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		YHaddtableData =new Object[allYHadd.size()][BeanUserAdd.UserAddtableTitles.length];
-		for(int i=0;i<allYHadd.size();i++) {
+		SjtableData =new Object[allSj.size()][BeanUserAdd.UserAddtableTitles.length];
+		for(int i=0;i<allSj.size();i++) {
 			for(int j=0;j<BeanUserAdd.UserAddtableTitles.length;j++) {
-				YHaddtableData[i][j]=allYHadd.get(i).getCell(j);
+				SjtableData[i][j]=allSj.get(i).getCell(j);
 			}
 		}
-		tableYHaddModel.setDataVector(YHaddtableData, tblYHaddTitles);
-		dataTableYHaddJTable.validate();
-		dataTableYHaddJTable.repaint();
+		tableSjModel.setDataVector(SjtableData, tblSjTitles);
+		dataTableSjJTable.validate();
+		dataTableSjJTable.repaint();
 	}
-
 	
 	
 	
@@ -105,7 +108,7 @@ public class FrmYHadd extends JFrame{
 		menu_5.add(menuItem_7);
 		menuItem_7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				reloadYHaddTable();
+				reloadSjTable();
 			}
 		});
 		menu_5.add(menuItem_6);
@@ -116,13 +119,50 @@ public class FrmYHadd extends JFrame{
 			}
 		});
 		menu_5.add(menuItem_9_1_1);
+		menuItem_9_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int i=FrmYHadd.this.dataTableSjJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择地址", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				FrmYHmodifyAdd dlg=new FrmYHmodifyAdd(allSj.get(i));
+//				System.out.println(allSj.get(i).getUser_add_id());
+				dlg.setVisible(true);
+			}
+		});
 		menu_5.add(menuItem_8);
+		menuItem_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int i=FrmYHadd.this.dataTableSjJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择地址", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				try {
+					WaiMaiUtil.userManager.deleteYHAD(allSj.get(i));
+					JOptionPane.showMessageDialog(null, "删除成功", "系统提示",JOptionPane.INFORMATION_MESSAGE);
+					
+				} catch (BaseException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		
 		
-		this.getContentPane().add(new JScrollPane(this.dataTableYHaddJTable), BorderLayout.CENTER);
+		this.getContentPane().add(new JScrollPane(this.dataTableSjJTable), BorderLayout.CENTER);
+		//JScrollPane 滚动条
+		this.dataTableSjJTable.addMouseListener(new MouseAdapter (){
+		@Override
+			public void mouseClicked(MouseEvent e) {//鼠标点击动作，列出右边的列表
+				int i=FrmYHadd.this.dataTableSjJTable.getSelectedRow();
+				if(i<0) {
+					return;
+				}
+			}
+		});	
 		
-		
-		this.reloadYHaddTable();//初始展现商家信息
+		this.reloadSjTable();//初始展现商家信息
 		//状态栏
 		contentPane.setLayout(new FlowLayout(FlowLayout.LEFT));
 		JLabel label=new JLabel("欢迎您，尊敬的"+BeanUser.currentLoginUser.getUser_name()+"用户！");

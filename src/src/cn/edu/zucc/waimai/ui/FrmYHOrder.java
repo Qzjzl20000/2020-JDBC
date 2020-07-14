@@ -80,7 +80,9 @@ public class FrmYHOrder extends JFrame{
 	private JMenuItem menuItem_2 = new JMenuItem("返回主界面");
 	private JMenu menu_5 = new JMenu("管理用户订单");
 	private JMenuItem menuItem_7 = new JMenuItem("查看订单（刷新）");
-
+	private JMenuItem menuItem_8 = new JMenuItem("确认收货");
+	private JMenuItem menuItem_9 = new JMenuItem("取消订单");
+	private JMenuItem menuItem_10 = new JMenuItem("评价送达订单");
 	
 	
 	public FrmYHOrder() {
@@ -108,7 +110,58 @@ public class FrmYHOrder extends JFrame{
 				reloadYHOrderTable();
 			}
 		});
-		
+		menu_5.add(menuItem_8);//确认收货
+		menuItem_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int i=FrmYHOrder.this.dataTableYHOrderJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择订单", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				try {
+					WaiMaiUtil.userSjManager.insureOrder(allYHOrder.get(i));
+					
+					reloadYHOrderTable();
+				} catch (BaseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		menu_5.add(menuItem_9);//取消
+		menuItem_9.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int i=FrmYHOrder.this.dataTableYHOrderJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择订单", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				try {
+					WaiMaiUtil.userSjManager.cancleOrder(allYHOrder.get(i));
+					reloadYHOrderTable();
+				} catch (BaseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		menu_5.add(menuItem_10);//评价
+		menuItem_10.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int i=FrmYHOrder.this.dataTableYHOrderJTable.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "未选择订单", "错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				try {
+					WaiMaiUtil.userSjManager.insureOrder(allYHOrder.get(i));
+					reloadYHOrderTable();
+				} catch (BaseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		
 		
 		this.getContentPane().add(new JScrollPane(this.dataTableYHOrderJTable), BorderLayout.CENTER);
