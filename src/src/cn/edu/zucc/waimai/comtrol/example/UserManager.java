@@ -335,26 +335,30 @@ public class UserManager implements IUserManager {
 			String sql="select ADDDATE(now(),interval 0 year)";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			java.sql.ResultSet rs=pst.executeQuery();
-			while(rs.next())
+			if(rs.next())
 				 timestamp=rs.getTimestamp(1);
+			
 			rs.close();
 			pst.close();
 			String sql1="select youhuiquan_id,sj_id,youhui_money,youhuiquan_count,youhuiquan_end_time"
 					+ " from user_youhuiquan_get"
-					+ " where user_id =? and youhuiquan_count>0";
+					+ " where user_id =? and youhuiquan_count>0 ";
 			//满足时间要在有效期内
 			java.sql.PreparedStatement pst1= conn.prepareStatement(sql1);
 			pst1.setInt(1,user.getUser_id());
 			java.sql.ResultSet rs1=pst1.executeQuery();
-			while(rs1.next()&&(rs1.getTimestamp(5).after(timestamp))) {
-				BeanUserYHQ p=new BeanUserYHQ();
-				p.setUser_id(user.getUser_id());
-				p.setYouhuiquan_id(rs1.getInt(1));
-				p.setSj_id(rs1.getInt(2));
-				p.setYouhui_money(rs1.getFloat(3));
-				p.setYouhuiquan_count(rs1.getInt(4));
-				p.setYouhuiquan_end_time(rs1.getTimestamp(5));
-				result.add(p);
+			
+			while(rs1.next()){
+				if(rs1.getTimestamp(5).after(timestamp)){
+					BeanUserYHQ p=new BeanUserYHQ();
+					p.setUser_id(user.getUser_id());
+					p.setYouhuiquan_id(rs1.getInt(1));
+					p.setSj_id(rs1.getInt(2));
+					p.setYouhui_money(rs1.getFloat(3));
+					p.setYouhuiquan_count(rs1.getInt(4));
+					p.setYouhuiquan_end_time(rs1.getTimestamp(5));
+					result.add(p);
+				}
 			}
 			return result;
 		} catch (SQLException e) {

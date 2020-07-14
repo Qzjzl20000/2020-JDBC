@@ -57,7 +57,6 @@ public class FrmVIP extends JFrame {
 		lblNewLabel.setBounds(22, 24, 259, 30);
 		contentPane.add(lblNewLabel);
 		String s =new String();
-		
 		if(BeanUser.currentLoginUser.getUser_vip_end_time().before(Timestamp.valueOf("2010-01-01 00:00:00"))) {
 			s="还不是会员，如需购买<br/><br/>请点击“购买”键购买会员时长";
 		}else {

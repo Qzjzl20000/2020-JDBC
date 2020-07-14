@@ -85,7 +85,6 @@ public class FrmYHBUY extends JFrame{
 	private Object SjFLtableData[][];
 	private DefaultTableModel tableSjFLModel=new DefaultTableModel();
 	private JTable dataTableSjFLJTable =new JTable(tableSjFLModel);
-	private BeanUserYHQ curSjFL=null;
 	List<BeanUserYHQ> allSjFLs=null;
 	
 	private void reloadSjFLTable(){
@@ -100,6 +99,7 @@ public class FrmYHBUY extends JFrame{
 		for(int i=0;i<allSjFLs.size();i++){
 			for(int j=0;j<BeanUserYHQ.UserYHQtableTitles.length;j++)
 				SjFLtableData[i][j]=allSjFLs.get(i).getCell(j);
+			
 		}
 		
 		tableSjFLModel.setDataVector(SjFLtableData,tblSjFLTitles);
@@ -180,28 +180,9 @@ public class FrmYHBUY extends JFrame{
 		});
 		
 		this.getContentPane().add(new JScrollPane(this.dataTableSjJTable), BorderLayout.CENTER);
-		//JScrollPane 滚动条
-	    this.dataTableSjJTable.addMouseListener(new MouseAdapter (){
-			@Override
-			public void mouseClicked(MouseEvent e) {//鼠标点击动作，列出右边的列表
-				int i=FrmYHBUY.this.dataTableSjJTable.getSelectedRow();
-				if(i<0) {
-					return;
-				}
-			}
-	    });
+	
 		this.getContentPane().add(new JScrollPane(this.dataTableSjFLJTable), BorderLayout.EAST);
-		//JScrollPane 滚动条
-	    this.dataTableSjFLJTable.addMouseListener(new MouseAdapter (){
-			@Override
-			public void mouseClicked(MouseEvent e) {//鼠标点击动作，列出右边的列表
-				int i=FrmYHBUY.this.dataTableSjFLJTable.getSelectedRow();
-				if(i<0) {
-					return;
-				}
-				
-			}
-	    });
+	
 		
 		this.reloadSjTable();//初始展现商家信息
 		this.reloadSjFLTable();//初始展现商家信息

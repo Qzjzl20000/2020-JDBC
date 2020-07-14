@@ -91,8 +91,8 @@ public class FrmYHCheckOut_with extends JFrame {
 				String add=new String(textField_1.getText());
 				try {
 					WaiMaiUtil.userManager.BUY(BeanUser.currentLoginUser, money, count, time, Integer.parseInt(add), yhq);
-					JOptionPane.showMessageDialog(null, "购买成功！", "系统提示",JOptionPane.INFORMATION_MESSAGE);
 					setVisible(false);
+					JOptionPane.showMessageDialog(null, "购买成功！", "系统提示",JOptionPane.INFORMATION_MESSAGE);
 				} catch (NumberFormatException | BaseException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
