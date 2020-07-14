@@ -25,6 +25,63 @@ import src.cn.edu.zucc.waimai.util.DbException;
 
 public class UserManager implements IUserManager {
 	@Override
+	public void comment(BeanOrder order,String comment,String qs_star,String addqs_money) throws BaseException{
+		float money=0;
+		int qs=0;
+		if(comment.equals("")) {
+			throw new BusinessException("评论内容不能为空！");
+		}
+		if(!qs_star.equals("")) {
+			qs=Integer.parseInt(qs_star);
+		}
+		if(!addqs_money.equals("")){
+			money=Float.parseFloat(addqs_money);
+		}
+		if(order.getOrder_state().equals("已送达")) {
+			java.sql.Connection conn=null;
+			try {
+				conn=DBUtil.getConnection();
+				String sql="insert into sp_evaluate(sp_id,sj_id,user_id,sp_evaluate_content,sp_evaluate_time,sp_evaluate_spxinji,sp_evaluate_qsxinji) "
+						+ " values(0,?,?,?,now(),3,?)";
+				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+				pst.setInt(1, order.getSj_id());
+				pst.setInt(2, order.getUser_id());
+				pst.setString(3, comment);
+				pst.setInt(4, qs);
+				pst.execute();
+				pst.close();
+				
+				sql="update qs_bill set qs_getmoney=qs_getmoney+? where order_id=?";
+				pst=conn.prepareStatement(sql);
+				pst.setFloat(1, money);
+				pst.setInt(2, order.getOrder_id());
+				pst.execute();
+				pst.close();
+				
+				sql="update order_data set order_state=? where order_id=?";
+				pst=conn.prepareStatement(sql);
+				pst.setString(1, "已完成");
+				pst.setInt(2, order.getOrder_id());
+				pst.execute();
+				pst.close();
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DbException(e);
+			} finally {
+				if(conn!=null)
+					try {
+						conn.close();
+					}catch (SQLException e) {
+						e.printStackTrace();
+					}
+			}
+		}
+		else {
+			throw new BusinessException("订单状态送达才能评价！");
+		}
+	}
+	@Override
 	public void modifyAdd(BeanUserAdd useradd,String province,String city, String area,
 			String adddetail,String name,String phoneNum) throws BaseException{
 		if(province.equals("")) {
@@ -185,7 +242,7 @@ public class UserManager implements IUserManager {
 			pst.setInt(2, sj_id);
 			pst.execute();
 			pst.close();
-			
+			JOptionPane.showMessageDialog(null, "订单评价成功！", "系统提示",JOptionPane.INFORMATION_MESSAGE);
 			conn.commit();
 			
 		} catch (SQLException e) {

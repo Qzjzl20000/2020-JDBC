@@ -153,13 +153,8 @@ public class FrmYHOrder extends JFrame{
 					JOptionPane.showMessageDialog(null, "未选择订单", "错误",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				try {
-					WaiMaiUtil.userSjManager.insureOrder(allYHOrder.get(i));
-					reloadYHOrderTable();
-				} catch (BaseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				Frmcomment dlg=new Frmcomment(allYHOrder.get(i));
+				dlg.setVisible(true);
 			}
 		});
 		

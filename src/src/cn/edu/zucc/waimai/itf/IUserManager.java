@@ -17,6 +17,11 @@ public interface IUserManager {
 	 * 删除地址
 	 * 可以为空
 	 */
+	public void comment(BeanOrder order,String comment,String qs_star,String addqs_money) throws BaseException;
+	/**
+	 * 删除地址
+	 * 可以为空
+	 */
 	public void modifyAdd(BeanUserAdd useradd,String province,String city, String area,
 			String adddetail,String name,String phoneNum) throws BaseException;
 	/**
